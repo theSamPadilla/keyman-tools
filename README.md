@@ -12,7 +12,7 @@ As an extra layer of safety, it is recommended to either:
 The tool doesn't literally _upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
 
 # Requiremnnts
-#### 1. Local Environment Setup
+### 1. Local Environment Setup
 1. Clone the repo
 ```
 git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
@@ -25,7 +25,7 @@ git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
 pip install -r requirements.txt
 ```
 
-#### 2. Google Cloud Setup
+### 2. Google Cloud Setup
 1. [Download the Google Cloud CLI (gcloud)](https://cloud.google.com/sdk/docs/install)
 This will be necessary to create your local credentials.
 
@@ -37,14 +37,14 @@ This will be necessary to create your local credentials.
 
 [More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
 
-#### 3. Credential Setup
+### 3. Credential Setup
 To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager.
 
 To be even more secure, we will use short lived [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
 
 Below are the instructions to do each of these.
 
-##### Create a Service Account
+#### Create a Service Account
 1. Required Roles:
 You need two required roles for this operation:
 - [`roles/iam.serviceAccountCreator`](https://cloud.google.com/iam/docs/service-accounts-create#permissions): Needed to create the service account
@@ -89,13 +89,13 @@ Choose the role you want to grant, and [follow the instructions here](https://cl
 
 **Note:** May be good to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service accoun.
 
-##### Create a Application Default Credentials
+#### Create a Application Default Credentials
 
-#### 4. Setup `.env` file
+# Configuring the Environment
 
-#### 5. Run the tool
+# Running the tool
 
-#### 3. Credential Setup
+# Contributing
 
 # Disclaimer & License
 Although Google is the employer of the author of the repo, this is not an officially supported Google product and does not reflect on Google in any ways.
