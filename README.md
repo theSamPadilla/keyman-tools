@@ -41,14 +41,13 @@ To limit the scope of actions that can be performed on your Google Cloud environ
 Below are the instructions to do each of these.
 
 ### 1. Create a Service Account
-1. **Required Roles:**
-
+**Required Roles:**
 You need two required roles for this operation:
-   - [`roles/iam.serviceAccountCreator`](https://cloud.google.com/iam/docs/service-accounts-create#permissions): Needed to create the service account
-   - [`roles/iam.serviceAccountTokenCreator`](https://cloud.google.com/iam/docs/service-account-permissions#token-creator-role): Needed to impersonate the service account and generate credentials.
+1. [`roles/iam.serviceAccountCreator`](https://cloud.google.com/iam/docs/service-accounts-create#permissions): Needed to create the service account
+2. [`roles/iam.serviceAccountTokenCreator`](https://cloud.google.com/iam/docs/service-account-permissions#token-creator-role): Needed to impersonate the service account and generate credentials.
 Ensure you have these permissions before beginning this process or ask your system administrator to grant you that role.
 
-2. **[Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)**
+**[Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)**
    - Navigate the IAM page on your Google Cloud console
    - Enter a service account name to display in the Google Cloud console. The Google Cloud console generates a service account ID based on this name. Edit the ID if you want to. You cannot change the ID later.
    - _Optional_: Enter a description of the service account. Click Done to finish creating the service account. We will set permissions to the service account in the next step.
