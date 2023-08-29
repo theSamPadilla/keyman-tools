@@ -12,7 +12,7 @@ As an extra layer of safety, it is recommended to either:
 The tool doesn't literally _upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
 
 # Requiremnnts
-### 1. Local Environment Setup
+## Local Environment Setup
 1. Clone the repo
 ```
 git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
@@ -23,7 +23,7 @@ git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
 pip install -r requirements.txt
 ```
 
-### 2. Google Cloud Setup
+## Google Cloud Setup
 1. [Download the Google Cloud CLI (gcloud)](https://cloud.google.com/sdk/docs/install)
 This will be necessary to create your local credentials.
 
@@ -40,14 +40,14 @@ To limit the scope of actions that can be performed on your Google Cloud environ
 
 Below are the instructions to do each of these.
 
-### 1. Create a Service Account
-##### Required Roles:
+## Create a Service Account
+#### Required Roles:
 You need two required roles for this operation:
 1. [`roles/iam.serviceAccountCreator`](https://cloud.google.com/iam/docs/service-accounts-create#permissions): Needed to create the service account
 2. [`roles/iam.serviceAccountTokenCreator`](https://cloud.google.com/iam/docs/service-account-permissions#token-creator-role): Needed to impersonate the service account and generate credentials.
 Ensure you have these permissions before beginning this process or ask your system administrator to grant you that role.
 
-##### [Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)
+#### [Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)
 To create a service account:
    - Navigate to the IAM page on your Google Cloud console
    - Enter a service account name to display in the Google Cloud console. The Google Cloud console generates a service account ID based on this name. Edit the ID if you want to. You cannot change the ID later.
@@ -61,7 +61,7 @@ gcloud iam service-accounts create <service-account-name> \
     --display-name="<display_name>"
 ```
 
-##### [Grant the appropriate permission to the service account](https://cloud.google.com/marketplace/docs/grant-service-account-access).
+#### [Grant the appropriate permission to the service account](https://cloud.google.com/marketplace/docs/grant-service-account-access).
 The tool, by default, perform three operations:
 - Secret creation: It creates the secret.
 - Version modification: It populates the secret with contetns by making a new version.
@@ -82,7 +82,7 @@ Choose the role you want to grant, and [follow the instructions here](https://cl
 
 **Note:** May be good to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service accoun.
 
-#### Create a Application Default Credentials
+## Create a Application Default Credentials
 
 # Configuring the Environment
 
