@@ -1,4 +1,4 @@
-# BLS Keys to Secret Manager Secure Upload
+# Secure Validator Keystore to Secret Manager
 This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secret-manager).
 
 The tool needs to run in the same filesystem where the keys are stored. All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
@@ -111,7 +111,7 @@ You can leave the credential file there or move it your directory of choice. Jus
 # Configuring the Environment
 Rename the `sample.env`:
 ```
-cd bls-to-execution-batch-update
+cd secure-validator-keystore-to-secret-manager
 mv sample.env .env
 ```
 
