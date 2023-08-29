@@ -33,23 +33,22 @@ This will be necessary to create your local credentials.
    - Search for `Secret Manager` on the search bar
    - Enable the API.
 
-[More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
+    [More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
 
 # Credentials
-To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager.
-
-To be even more secure, we will use short lived [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
+To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager. To be even more secure, we will use short lived [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
 
 Below are the instructions to do each of these.
 
-#### Create a Service Account
-1. Required Roles:
+### 1. Create a Service Account
+1. **Required Roles:**
+
 You need two required roles for this operation:
    - [`roles/iam.serviceAccountCreator`](https://cloud.google.com/iam/docs/service-accounts-create#permissions): Needed to create the service account
    - [`roles/iam.serviceAccountTokenCreator`](https://cloud.google.com/iam/docs/service-account-permissions#token-creator-role): Needed to impersonate the service account and generate credentials.
 Ensure you have these permissions before beginning this process or ask your system administrator to grant you that role.
 
-1. [Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)
+2. **[Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)**
    - Navigate the IAM page on your Google Cloud console
    - Enter a service account name to display in the Google Cloud console. The Google Cloud console generates a service account ID based on this name. Edit the ID if you want to. You cannot change the ID later.
    - _Optional_: Enter a description of the service account. Click Done to finish creating the service account. We will set permissions to the service account in the next step.
