@@ -4,12 +4,12 @@ This repo contains a tool and instructions to securely upload/create validator k
 The tool needs to run in the same filesystem where the keys are stored. All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 As an extra layer of safety, it is recommended to either:
-- Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM)
+- Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM), ensuring API traffic is private.
 - Securely upload the keys to an air-gapped machine on Google Cloud using [Google Cloud VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview), then create the secrets.
 - Setup another form of [private connectivity between your environment and Google Cloud](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview) when running this tool.
 
 **Note:**
-The tool doesn't literally _upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
+The tool doesn't _literally upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
 
 # Requiremnnts
 ## Local Environment Setup
@@ -154,6 +154,13 @@ python main.py
 ```
 
 # Contributing
+This repo is accepting contributions, issues, and feedback.
+To contribute, fork the repo, make the changes, then make a PR against `main`.
+
+#### Possible Extensions:
+- Automate key generation.
+- Enable upload via `gcloud`.
+- Enable batch deletion of secrets on Secret Manager.
 
 # Disclaimer & License
 Although Google is the employer of the author of the repo, this is not an officially supported Google product and does not reflect on Google in any ways.
