@@ -9,7 +9,6 @@ As an extra layer of safety, it is recommended to either:
 - Setup another form of [private connectivity between your environment and Google Cloud](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview) when running this tool.
 
 **Note:**
-
 The tool doesn't literally _upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
 
 # Requiremnnts
@@ -82,13 +81,77 @@ To grant these permissions, you have two options:
 Choose the role you want to grant, then [follow the instructions here](https://cloud.google.com/marketplace/docs/grant-service-account-access) to grant the service account those permissions.
 
 **Note:**
-May be good to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service accoun.
+It is recommended to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service account.
 
-## Create a Application Default Credentials
+## Create Application Default Credentials
+Application default credentials are one of the best and most secure ways to authenticate your API calls.
+It works through environment variables and the public Google Cloud libraries automatically search for the credentials in your execution environment.
+
+In the case of this tool, we will create an ADC file impersonating our service account and set the [GOOGLE_APPLICATION_CREDENTIALS](https://cloud.google.com/docs/authentication/application-default-credentials#GAC) environment variable using our `.env` file.
+[Service account impersonation](https://cloud.google.com/docs/authentication/use-service-account-impersonation) allows you to request short-lived credentials for a service account that has either the authorization that your use case requires, or, as in our case, a scope more limited than the user.
+
+First, [initialize `gcloud`](https://cloud.google.com/sdk/gcloud/reference/init):
+```
+gcloud init
+```
+
+Follow the prompts to complete the authentication process. Make sure to log-in with your own email and connect to the appropriate project where the keys will be stored.
+
+Then creat the ADC file by running:
+```
+gcloud auth application-default login --impersonate-service-account <service-account-email>
+```
+
+Make sure to replace `<service-account-email>` with the email of the service account created previously.
+
+Follow the prompts to complete the authentication process.
+The command will create a `application_default_credentials.json` in the default location of `/home/<user>/.config/gcloud/`.
+You can leave the credential file there or move it your directory of choice. Just make a note of where the file is located as it will need to be passed to the `.env` file
 
 # Configuring the Environment
+Rename the `sample.env`:
+```
+cd bls-to-execution-batch-update
+mv sample.env .env
+```
+
+Then replace:
+- `PROJECT_ID` with your Google Cloud Project ID
+- `KEY_DIRECTORY_PATH` with the path to the directory containing your validator keystores.
+    Note that every `.json` file in this directory will be uploaded to Secret Manager. Make sure to only have the keys you want to upload in this directory.
+- `GOOGLE_APPLICATION_CREDENTIALS` with the path to the ADC file created preciously=.
+- `OUTPUT_DIRECTORY` with the path to the directory where you want the output files to be written.
 
 # Running the tool
+### Parameters
+The tool takes two optional parameters:
+- `optimistic`
+When this flag is passed, it makes the tool not check the validator keystore cheksum with the checksum of the created secret.
+Set this flag if you choose not to give your service account secret access permissions (`secretmanager.versions.access`).
+The tool will verify the checksums if the file is not set.
+
+- `help` or `--help` or `h`
+Prints a CLI help message.
+
+### Output file overwrite Confirmation
+Before running, the tool will check for the following files in `OUTPUT_DIRECTORY`:
+- `public_keys.txt`
+- `secret_names.txt`
+- `pubkey_to_names.txt`
+
+If it finds any of these files, it will prompt you for a manual `yes` confirmation that you want to overwrite them.
+
+### Output
+The tool outputs the aforementioned three files in you `OUTPUT_DIRECTORY`.
+- `public_keys.txt` - A list of all the public keys uploaded.
+- `secret_names.txt` - A list of all the secret names created.
+- `pubkey_to_names.txt` - A mapping of the public key to the created secret name.
+
+### Running
+To run the tool:
+```
+python main.py
+```
 
 # Contributing
 
