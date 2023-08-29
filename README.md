@@ -17,9 +17,7 @@ The tool doesn't literally _upload_ the keystores. Rather, it reads the keystror
 ```
 git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
 ```
-
 2. [Download Python]((https://www.python.org/downloads/))
-
 3. Install requirements:
 ```
 pip install -r requirements.txt
@@ -30,10 +28,10 @@ pip install -r requirements.txt
 This will be necessary to create your local credentials.
 
 2. Enable the Secret Manager API on the Google Cloud Console for the project where you want to upload the keys
-- Open your Google Cloud Console
-- [Make sure billing is enabled](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled#console)
-- Search for `Secret Manager` on the search bar
-- Enable the API.
+   - Open your Google Cloud Console
+   - [Make sure billing is enabled](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled#console)
+   - Search for `Secret Manager` on the search bar
+   - Enable the API.
 
 [More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
 
