@@ -165,7 +165,7 @@ To contribute, fork the repo, make the changes, then make a PR against `main`.
 # Disclaimer & License
 Although Google is the employer of the author of the repo, this is not an officially supported Google product and does not reflect on Google in any ways.
 
-Neither the author of this repo nor its employer shall be held liable for any issues caused by the usage of this code. This includes but is not limited to bugs, errors, wrong or outdated inforamtion, or even lost of funds.
+Neither the author of this repo nor its employer shall be held liable for any issues caused by the usage of this code. This includes but is not limited to bugs, errors, wrong or outdated inforamtion, or even loss of funds.
 
 This repo is published solely on the basis of good faith and as a tool to help developers. This code should be used with caution. The user is running this code at its own risk.
 
