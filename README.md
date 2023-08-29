@@ -9,6 +9,7 @@ As an extra layer of safety, it is recommended to either:
 - Setup another form of [private connectivity between your environment and Google Cloud](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview) when running this tool.
 
 **Note:**
+
 The tool doesn't literally _upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
 
 # Requiremnnts
@@ -47,8 +48,8 @@ You will need two roles for this operation:
 2. [`roles/iam.serviceAccountTokenCreator`](https://cloud.google.com/iam/docs/service-account-permissions#token-creator-role): Needed to impersonate the service account and generate credentials.
 Ensure you have these permissions before beginning this process or ask your system administrator to grant you that role.
 
-### [Create a Service Account](https://cloud.google.com/iam/docs/service-accounts-create#creating)
-To create a service account:
+### Create a Service Account
+To [create a service account]((https://cloud.google.com/iam/docs/service-accounts-create#creating)):
    - Navigate to the IAM page on your Google Cloud console
    - Enter a service account name to display in the Google Cloud console. The Google Cloud console generates a service account ID based on this name. Edit the ID if you want to. You cannot change the ID later.
    - _Optional_: Enter a description of the service account. Click Done to finish creating the service account. We will set permissions to the service account in the next step.
@@ -61,26 +62,27 @@ gcloud iam service-accounts create <service-account-name> \
     --display-name="<display_name>"
 ```
 
-### [Grant the appropriate permission to the service account](https://cloud.google.com/marketplace/docs/grant-service-account-access).
-The tool, by default, perform three operations:
-- Secret creation: It creates the secret.
-- Version modification: It populates the secret with contetns by making a new version.
-- Version checking: It checks the contents of the secret to verify data integrity compared to the local keystore.
+### Grant the appropriate permission to the service account.
+The tool, by default, performs three operations:
+- **Secret creation:** It creates the secret.
+- **Version modification:** It populates the secret with contetns by making a new version.
+- **Version accessing:** It accesses the contents of the secret to verify data integrity compared to the local keystore.
 
-Each ot the three operation require the following IAM permissions:
-- Secret creation: `secretmanager.secrets.create`
-- Version modification: `secretmanager.versions.add`
-- Version checking: `secretmanager.versions.access`
+Each ot the three operation require the following [Secret Manager IAM permissions](https://cloud.google.com/secret-manager/docs/access-control#assign-iam-roles):
+- **Secret creation:** `secretmanager.secrets.create`
+- **Version modification:** `secretmanager.versions.add`
+- **Version accessing:** `secretmanager.versions.access`
 
-The last operation and its related permission can be optionally removed by passing the flag `optimistic` to the tool.
+The last operation and its related permission can be optionally removed by passing the flag `optimistic` when executing the tool.
 
 To grant these permissions, you have two options:
-1. You can [create a custom role](https://cloud.google.com/iam/docs/creating-custom-roles) with only those permissions. [recommended]
-2. You can use the default role of `roles/secretmanager.admin` that grants all the permissions listed above.
+1. [Create a custom role](https://cloud.google.com/iam/docs/creating-custom-roles) with only those permissions (recommended).
+2. Use the default role of `roles/secretmanager.admin` that grants all the permissions needed.
 
-Choose the role you want to grant, and [follow the instructions here](https://cloud.google.com/marketplace/docs/grant-service-account-access) to grant the service account those permissions.
+Choose the role you want to grant, then [follow the instructions here](https://cloud.google.com/marketplace/docs/grant-service-account-access) to grant the service account those permissions.
 
-**Note:** May be good to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service accoun.
+**Note:**
+May be good to refresh on the [principle of least privilege](https://cloud.google.com/iam/docs/using-iam-securely#least_privilege) when choosing the scope of permissions to grant to your service accoun.
 
 ## Create a Application Default Credentials
 
