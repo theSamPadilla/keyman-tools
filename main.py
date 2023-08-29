@@ -1,44 +1,23 @@
 """Batch Secure Upload Validator Signing Keys to Secret Manager"""
 import json
-import sys
 import os
 import re
 import hashlib
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv #type: ignore
 from google.cloud import secretmanager
 from google.api_core.exceptions import NotFound
-
-def main(exec_mode: str, config_list:str):
-    """Main driver. Unpacks configs and calls uploads.
-    Args:
-        exec_mode: string - 'gcloud' or 'api'.
-        config_list: list<string> - [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH].
-    """
-
-    #Upload through gcloud or API
-    if exec_mode == "gcloud":
-        gcloud_create(config_list)
-    else:
-        api_create(config_list)
         
-    print ("\n[INFO] Done with file uploads. Check Google Cloud Secret Manager.")
-
-# Upload Secrets #
-def gcloud_create(secrets_configs:list):
-    """Creates secrets using the google cloud cli"""
-    return
-
-def api_create(secrets_configs:list):
+def create_secrets(secrets_configs:list):
     """Creates secrets using the python library through the API.
     
     Args:
         secret_configs: list<string> -
-        [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH].
+        [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS].
     """
 
     #Unpack configs
-    PROJECT_ID, KEY_DIRECTORY_PATH, _, _ = secrets_configs
+    PROJECT_ID, KEY_DIRECTORY_PATH, _ = secrets_configs
 
     #Create client #?Note: Credentials are read from env file
     client = secretmanager.SecretManagerServiceClient()
@@ -62,7 +41,7 @@ def api_create(secrets_configs:list):
 
             #Calculate string SHA256.
             str_sha256 = hashlib.sha256(contents.encode())
-            
+
             #Add secret version
             request={"parent": f"projects/{PROJECT_ID}/secrets/{key_file_name}",
                      "payload": {"data": payload_bytes}}
@@ -80,23 +59,21 @@ def api_create(secrets_configs:list):
                 exit(1)
 
             i += 1
-           
+
+    print ("\n[INFO] Done with file uploads {i}/{len(file_names)}.\n",
+           "\tCheck Google Cloud Secret Manager.")
+
 # Helper Functions #
-def validate_env_and_params(args:list):
+def validate_env_and_params():
     """
     Validates the execution environment and parameters:
-        1. Checks for valid number of parameters.
-        2. Checks validity of PROJECT_ID
-        3. Checks application default credentials and gcloud exist
-        4. Checks that the key directory exists.
+        1. Checks validity of PROJECT_ID
+        2. Checks application default credentials
+        3. Checks that the key directory exists.
     Returns True if all are valid, false otherwise.
     """
     #Parameters
-    if len(args) != 2 or (args[1] != "gcloud" and args[1] != "api"):
-        print("ERROR: Wrong number of parameters",
-              "\nPlease pass execution mode flag as \'glcoud\' or \'api\'.")
-        return []
-    PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH = get_configs()
+    PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS = get_configs()
 
     #Project ID
     if not PROJECT_ID or not valid_proj_id(PROJECT_ID):
@@ -111,16 +88,6 @@ def validate_env_and_params(args:list):
     if not os.path.exists(KEY_DIRECTORY_PATH):
         print("ERROR: Keys directory not found.\nPlease add the path to the .env file.")
         return []
-
-    #Gcloud
-    #?Note: If uploading via gcloud, no need for ADC.
-    if args[1] == 'gcloud':
-        if not os.path.exists(GCLOUD_PATH):
-            print("ERROR: Google Cloud CLI (gcloud) not found.",
-                    "\nPlease download gcloud into the local machine",
-                    "https://cloud.google.com/sdk/docs/install or use the API to upload keys.")
-            return []
-        return [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH]
 
     #Application Default Credentials
     if not os.path.exists(GOOGLE_APPLICATION_CREDENTIALS):
@@ -143,7 +110,7 @@ def validate_env_and_params(args:list):
                 f"\nPlease ensure the file has all the required keys: {required_keys}.")
         return []
 
-    return [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH]
+    return [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS]
 
 def get_configs():
     """Opens the .env file and loads configs"""
@@ -151,9 +118,8 @@ def get_configs():
     PROJECT_ID = os.getenv("PROJECT_ID")
     KEY_DIRECTORY_PATH = os.getenv("KEY_DIRECTORY_PATH")
     GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    GCLOUD_PATH = os.getenv("GCLOUD_PATH")
     
-    return [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS, GCLOUD_PATH]
+    return [PROJECT_ID, KEY_DIRECTORY_PATH, GOOGLE_APPLICATION_CREDENTIALS]
 
 def valid_proj_id(s:str):
     """Validates the format of a project ID in ^[a-z][a-z0-9-]*[a-z0-9]$"""
@@ -173,12 +139,9 @@ def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManage
             "secret": {"replication": {"automatic": {}}},
         })
 
-    return
-
-
 # Main Caller #
 if __name__ == "__main__":
-    configs = validate_env_and_params(sys.argv)
+    configs = validate_env_and_params()
     if not configs:
         exit(3)
-    main(sys.argv[1], configs)
+    create_secrets(configs)
