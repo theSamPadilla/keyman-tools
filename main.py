@@ -179,7 +179,7 @@ def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManage
     secret_name = secret_manager_client.secret_path(project_id, secret_id)
     try:
         secret_manager_client.get_secret(request={"name": secret_name})
-    except NotFound:
+    except Exception as _:
         #Create empty secret
         secret_manager_client.create_secret(request={
             "parent": f"projects/{project_id}",
