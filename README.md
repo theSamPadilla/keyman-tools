@@ -124,7 +124,7 @@ cp sample.env .env
 Then, in `.env`, replace:
 - `PROJECT_ID` with your Google Cloud Project ID
 - `KEY_DIRECTORY_PATH` with the path to the directory containing your validator keystores.
-    Note that every `.json` file in this directory will be uploaded to Secret Manager. Make sure to only have the keys you want to upload in this directory.
+    **Note that every `.json` file in this directory will be uploaded to Secret Manager. Move your `deposit-data.json` file outside of this directory, or it will cause errors with the tool.**
 - `GOOGLE_APPLICATION_CREDENTIALS` with the path to the ADC file created preciously=.
 - `OUTPUT_DIRECTORY` with the path to the directory where you want the output files to be written.
 
@@ -135,6 +135,10 @@ The tool takes two optional parameters:
 When this flag is passed, it makes the tool not check the validator keystore cheksum with the checksum of the created secret.
 Set this flag if you choose not to give your service account secret access permissions (`secretmanager.versions.access`).
 The tool will verify the checksums if the file is not set.
+
+- `skip`
+When this flag is set, the tool will not update the version (the contents) of a secret that already exists on Secret Manager.
+Set this flag if you want run the tool in multiple waves against the same key directory, and want to keep a uniform version across all the Secrets.
 
 - `help` or `--help` or `h`
 Prints a CLI help message.
