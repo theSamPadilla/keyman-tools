@@ -36,9 +36,14 @@ This will be necessary to create your local credentials.
     [More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
 
 # Credentials
-To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager. To be even more secure, we will use short lived [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
+To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager. To be even more secure, we will use short lived [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
 
-Below are the instructions to do each of these.
+Below are the instructions to do each of these. You can skip the process of generating a service account and use your principal credentials directly. This is not recommended as it increases the privileges of the credentials you generate.
+
+To generate an ADC file from your principal, you can run:
+```
+gcloud auth application-default login
+```
 
 ## Create a Service Account
 ### Required Roles:
