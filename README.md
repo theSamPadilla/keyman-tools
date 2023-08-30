@@ -6,7 +6,7 @@ The tool needs to run in the same filesystem where the keys are stored (store th
 As an extra layer of safety, it is recommended to either:
 - Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM), ensuring API traffic is private.
 - Securely upload the keys to an air-gapped machine on Google Cloud using [Google Cloud VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview), then create the secrets.
-- Setup another form of [private connectivity between your environment and Google Cloud](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview) when running this tool.
+- Setup another form of [private connectivity](https://cloud.google.com/vpc/docs/private-access-options) between your environment and Google Cloud when running this tool.
 
 **Note:**
 The tool doesn't _literally upload_ the keystores. Rather, it reads the keystrore contents and creates secret manager entries with the same encoding. The word _"upload"_ is used through this `README` interchangably with secret creation.
