@@ -124,7 +124,7 @@ cp sample.env .env
 Then, in `.env`, replace:
 - `PROJECT_ID` with your Google Cloud Project ID
 - `KEY_DIRECTORY_PATH` with the path to the directory containing your validator keystores.
-    **Note that every `.json` file in this directory will be uploaded to Secret Manager. Move your `deposit-data.json` file outside of this directory, or it will cause errors with the tool.**
+    **Note that the tool will only upload files that end `.json` AND start with `keystore-m`.**
 - `GOOGLE_APPLICATION_CREDENTIALS` with the path to the ADC file created preciously=.
 - `OUTPUT_DIRECTORY` with the path to the directory where you want the output files to be written.
 
