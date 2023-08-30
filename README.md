@@ -4,7 +4,7 @@ This repo contains a tool and instructions to securely upload/create validator k
 The tool needs to run in the same filesystem where the keys are stored (store the keys in a differnt directory than this repo). All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 As an extra layer of safety, it is recommended to either:
-- Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM), ensuring API traffic is private.
+- Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM) without public internet connectivity (no public IP address), ensuring API traffic is private.
 - Securely upload the keys to an air-gapped machine on Google Cloud using [Google Cloud VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview), then create the secrets.
 - Setup another form of [private connectivity](https://cloud.google.com/vpc/docs/private-access-options) between your environment and Google Cloud when running this tool.
 
