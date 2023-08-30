@@ -52,6 +52,7 @@ def create_secrets(secrets_configs:list):
             #Skip version update is skip is set
             if skip and exists:
                 print("\t[-] Skipping version update of existing secret.")
+                i += 1
                 continue
 
             #Read contents of json into str and pass to bytes
