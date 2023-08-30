@@ -43,23 +43,24 @@ def create_secrets(secrets_configs:list):
     i = 0
     for key_file_name in file_names:
         print(f"[INFO] Creating Secrets... {i}/{len(file_names)}", flush=True)
-        if key_file_name.endswith(".json"):
+        if key_file_name.endswith(".json") and key_file_name[:10] == "keystore-m":
             key_file_name = key_file_name.strip(".json")
 
             #Create secret if does not exist
             exists = create_secret_if_not_exists(client, project_id, key_file_name)
-
-            #Skip version update is skip is set
-            if skip and exists:
-                print("\t[-] Skipping version update of existing secret.")
-                i += 1
-                continue
 
             #Read contents of json into str and pass to bytes
             with open(f"{key_directory_path}{key_file_name}.json", 'r', encoding="us-ascii") as f:
                 contents = f.read()
                 f.close()
             payload_bytes = contents.encode("UTF-8")
+
+            #Skip version update is skip is set
+            if skip and exists:
+                print("\t[-] Skipping version update of existing secret.")
+                pubkeys_names[json.loads(contents)["pubkey"]] = key_file_name
+                i += 1
+                continue
 
             #Add secret version
             request={"parent": f"projects/{project_id}/secrets/{key_file_name}",
