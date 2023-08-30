@@ -51,6 +51,7 @@ def create_secrets(secrets_configs:list):
 
             #Skip version update is skip is set
             if skip and exists:
+                print("\t[-] Skipping version update of existing secret.")
                 continue
 
             #Read contents of json into str and pass to bytes
@@ -264,8 +265,8 @@ def print_help():
 
     print("\n\n----- PARAMETERS -----")
     print("The tool takes 3 optional parameters")
-    print("-\'optimistic\' -> Makes the tool not check the validator keystore cheksum with the checksum of the created secret.")
-    print("-\'skip\' -> Makes the tool skip a version update of existing secrets.")
+    print("- \'optimistic\' -> Makes the tool not check the validator keystore cheksum with the checksum of the created secret.")
+    print("- \'skip\' -> Makes the tool skip a version update of existing secrets.")
     print("- \'help\' -> Prints this message.")
 
     print("\n\n----- OUTPUT -----")
