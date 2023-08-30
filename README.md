@@ -115,13 +115,13 @@ The command will create a `application_default_credentials.json` in the default 
 You can leave the credential file there or move it your directory of choice. Just make a note of where the file is located as it will need to be passed to the `.env` file
 
 # Configuring the Environment
-Rename the `sample.env`:
+Make a copy the `sample.env`:
 ```
 cd secure-validator-keystore-to-secret-manager
-mv sample.env .env
+cp sample.env .env
 ```
 
-Then replace:
+Then, in `.env`, replace:
 - `PROJECT_ID` with your Google Cloud Project ID
 - `KEY_DIRECTORY_PATH` with the path to the directory containing your validator keystores.
     Note that every `.json` file in this directory will be uploaded to Secret Manager. Make sure to only have the keys you want to upload in this directory.
