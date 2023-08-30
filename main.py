@@ -22,7 +22,6 @@ import sys
 
 from dotenv import load_dotenv #type: ignore
 from google.cloud import secretmanager
-from google.api_core.exceptions import NotFound
 
 def create_secrets(secrets_configs:list):
     """Creates secrets using the python library through the API.
@@ -33,7 +32,7 @@ def create_secrets(secrets_configs:list):
     """
 
     #Unpack configs
-    project_id, key_directory_path, _, output_dir, optimistic = secrets_configs
+    project_id, key_directory_path, _, output_dir, optimistic, skip = secrets_configs
 
     #Create client and storing dict
     client = secretmanager.SecretManagerServiceClient()
@@ -48,8 +47,12 @@ def create_secrets(secrets_configs:list):
             key_file_name = key_file_name.strip(".json")
 
             #Create secret if does not exist
-            create_secret_if_not_exists(client, project_id, key_file_name)
+            exists = create_secret_if_not_exists(client, project_id, key_file_name)
 
+            #Skip version update is skip is set
+            if skip and exists:
+                continue
+            
             #Read contents of json into str and pass to bytes
             with open(f"{key_directory_path}{key_file_name}.json", 'r', encoding="us-ascii") as f:
                 contents = f.read()
@@ -82,10 +85,10 @@ def create_secrets(secrets_configs:list):
     print(f"\t[✓] Done. Check {output_dir}")
 
 # Helper Functions #
-def validate_env_and_params(params):
+def validate_env_and_params(params) -> list:
     """
     Validates the execution environment and parameters:
-        1. Checks optimistic optional parameter
+        1. Checks optional parameters
         2. Checks validity of project_id
         3. Checks that key directory exists
         4. Checks that output directory exists
@@ -99,21 +102,14 @@ def validate_env_and_params(params):
         print_help()
         exit(0)
 
-    #Parameters
-    optimistic = False
-    if len(params) > 2:
-        print("ERROR: Two many parameters.",
-              "\nOnly accepted parameter is \'optimistic\'.",
-                "\nSet this flag if you don't want checksum verification of uploaded data.")
-        return []
-    if len(params) == 2:
-        if params[1] != "optimistic":
-            print("ERROR: Invalid optional parameter.",
-                  "\nOnly accepted parameter is \'optimistic\'.",
-                    "\nSet this flag if you don't want checksum verification of uploaded data.")
+    #Process optional params if they exist
+    optimistic, skip = False, False
+    if len(params) > 1:
+        optional_params = check_optional_params(params)
+        if not optional_params:
             return []
-        else:
-            optimistic = True
+        optimistic = optional_params[0]
+        skip = optional_params[1]
 
     #Configs
     project_id, key_directory_path, google_adc, output_dir = get_configs()
@@ -156,9 +152,9 @@ def validate_env_and_params(params):
 
     #[Optional] Validate ADC format
 
-    return [project_id, key_directory_path, google_adc, output_dir, optimistic]
+    return [project_id, key_directory_path, google_adc, output_dir, optimistic, skip]
 
-def get_configs():
+def get_configs() -> list:
     """Opens the .env file and loads configs"""
     load_dotenv()
     project_id = os.getenv("PROJECT_ID")
@@ -169,16 +165,28 @@ def get_configs():
 
     return [project_id, key_directory_path, google_adc, output_dir]
 
-def valid_proj_id(s:str):
+def valid_proj_id(s:str) -> bool:
     """Validates the format of a project ID in ^[a-z][a-z0-9-]*[a-z0-9]$"""
     pattern = "^[a-z][a-z0-9-]*[a-z0-9]$"
     return re.match(pattern, s) is not None
 
-def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManagerServiceClient, project_id:str, secret_id:str) -> secretmanager.Secret:
-    """Checks if a given secret exists and creates one if not"""
+def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManagerServiceClient,
+                                project_id:str, secret_id:str) -> bool:
+    """Checks if a given secret exists and creates one if not
+    
+    Args:
+        secret_manager_client: The secret manager client
+        project_id: The project id
+        secret_id: The secret name
+    Returns:
+        True if the secret exists.
+        False if it was created.
+
+    """
     secret_name = secret_manager_client.secret_path(project_id, secret_id)
     try:
         secret_manager_client.get_secret(request={"name": secret_name})
+        return True
     except Exception as _:
         #Create empty secret
         secret_manager_client.create_secret(request={
@@ -186,6 +194,7 @@ def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManage
             "secret_id": secret_id,
             "secret": {"replication": {"automatic": {}}},
         })
+        return False
 
 def save_validator_pubkey_and_name(pubkeys_to_names:dict, output:str):
     """
@@ -209,7 +218,7 @@ def verify_payload(client: secretmanager.SecretManagerServiceClient,
                    version: secretmanager.SecretVersion,
                    pubkeys_names: dict,
                    secret_name: str,
-                   contents: str):
+                   contents: str) -> dict:
     """
     Verifies the sha256 checkcsum of the contents of keystore file, compared
     to the hash of the created secret. If succesful, it stores the pubkey and
@@ -265,7 +274,7 @@ def print_help():
     print("- \'pubkey_to_names.txt\' -> A mapping of the public key to the created secret name.")
     print("\nFor a full description, see the README.md\n")
 
-def validate_adc_format(adc_format:str, adc_path:str):
+def validate_adc_format(adc_format:str, adc_path:str) -> bool:
     """
     Validates the format of the ADC file.
 
@@ -293,6 +302,43 @@ def validate_adc_format(adc_format:str, adc_path:str):
                     f"\nPlease ensure the file has all the required keys: {required_keys}.")
             return False
         return True
+
+def check_optional_params(params: list) -> list:
+    """
+    Checks for the optional parameters `skip` and `optional`
+
+    Args:
+        params: the list of optional parmeters.
+    Returns:
+        [] If params are invalid
+        [bool, bool] with the value of optimistic and skip, in that order.
+    """
+    optimistic = False
+    skip = False
+    if len(params) > 3:
+        print("ERROR: Two many parameters.",
+              "\nOnly accepted parameters are:",
+              "\n\t- \'optimistic\' ->",
+                "Set this flag if you don't want checksum verification of uploaded data.",
+                "\n\t- \'optimistic\' ->",
+                "Set this flag if you want to skip updating the version on existing secrets.",
+                "\n\t See README for more info.")
+        return []
+    if "optimistic" not in params and "skip" not in params:
+        print("ERROR: Invalid optional parameter.",
+            "\nOnly accepted parameters are:",
+            "\n\t- \'optimistic\' ->",
+            "Set this flag if you don't want checksum verification of uploaded data.",
+            "\n\t- \'optimistic\' ->",
+            "Set this flag if you want to skip updating the version on existing secrets.",
+            "\n\t See README for more info.")
+        return []
+    if "optimistic" in params:
+        optimistic = True
+    if "skip" in params:
+        skip = True
+
+    return [optimistic, skip]
 
 # Main Caller #
 if __name__ == "__main__":
