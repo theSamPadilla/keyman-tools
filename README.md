@@ -18,7 +18,8 @@ The tool doesn't _literally upload_ the keystores. Rather, it reads the keystror
 git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
 ```
 2. [Download Python]((https://www.python.org/downloads/))
-3. Install requirements:
+3. [Download pip](https://pip.pypa.io/en/stable/installation/)
+4. Install requirements:
 ```
 pip install -r requirements.txt
 ```
