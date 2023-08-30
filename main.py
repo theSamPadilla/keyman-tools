@@ -52,7 +52,7 @@ def create_secrets(secrets_configs:list):
             #Skip version update is skip is set
             if skip and exists:
                 continue
-            
+
             #Read contents of json into str and pass to bytes
             with open(f"{key_directory_path}{key_file_name}.json", 'r', encoding="us-ascii") as f:
                 contents = f.read()
@@ -187,7 +187,7 @@ def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManage
     try:
         secret_manager_client.get_secret(request={"name": secret_name})
         return True
-    except Exception as _:
+    except Exception as _: #pylint: disable=W0718
         #Create empty secret
         secret_manager_client.create_secret(request={
             "parent": f"projects/{project_id}",
@@ -263,8 +263,9 @@ def print_help():
           "the \'.env\' file.")
 
     print("\n\n----- PARAMETERS -----")
-    print("The tool takes 2 optional parameters")
+    print("The tool takes 3 optional parameters")
     print("-\'optimistic\' -> Makes the tool not check the validator keystore cheksum with the checksum of the created secret.")
+    print("-\'skip\' -> Makes the tool skip a version update of existing secrets.")
     print("- \'help\' -> Prints this message.")
 
     print("\n\n----- OUTPUT -----")
