@@ -148,26 +148,13 @@ def validate_env_and_params(params):
             return []
         print()
 
-    #Application Default Credentials
+    #Application Default Credentials exist
     if not os.path.exists(google_adc):
         print("ERROR: Application default credentials file not found.",
                 "\nPlease create an ADC file. See the README for how to do this.")
         return []
 
-    #Validate ADC format (Service Account format):
-    with open(google_adc, "r", encoding="utf-8") as f:
-        buff = json.load(f)
-        f.close()
-    required_source_keys = ["client_id", "client_secret", "refresh_token", "type"]
-    required_keys = ["service_account_impersonation_url", "source_credentials", "type"]
-    if not all([k in buff for k in required_keys]):
-        print("ERROR: Application default credentials file has the wrong format.",
-                f"\nPlease ensure the file has all the required keys: {required_keys}.")
-        return []
-    if not all([k in buff["source_credentials"] for k in required_source_keys]):
-        print("ERROR: Application default credentials file has the wrong format.",
-                f"\nPlease ensure the file has all the required keys: {required_keys}.")
-        return []
+    #[Optional] Validate ADC format
 
     return [project_id, key_directory_path, google_adc, output_dir, optimistic]
 
@@ -277,6 +264,35 @@ def print_help():
     print("- \'secret_names.txt\' -> A list of all the secret names created.")
     print("- \'pubkey_to_names.txt\' -> A mapping of the public key to the created secret name.")
     print("\nFor a full description, see the README.md\n")
+
+def validate_adc_format(adc_format:str, adc_path:str):
+    """
+    Validates the format of the ADC file.
+
+    Args:
+        adc_format: The format of the file. Either Service Account Impersonation
+            (value=sai) or principal (value=pri).
+        adc_path: The path of the adc file.
+    
+    Returns:
+        True if format is valid. False otherwise.
+    """
+    #Validate ADC Service Account format:
+    if adc_format == "sai":
+        with open(adc_path, "r", encoding="utf-8") as f:
+            buff = json.load(f)
+            f.close()
+        required_source_keys = ["client_id", "client_secret", "refresh_token", "type"]
+        required_keys = ["service_account_impersonation_url", "source_credentials", "type"]
+        if not all(k in buff for k in required_keys):
+            print("ERROR: Application default credentials file has the wrong format.",
+                    f"\nPlease ensure the file has all the required keys: {required_keys}.")
+            return False
+        if not all(k in buff["source_credentials"] for k in required_source_keys):
+            print("ERROR: Application default credentials file has the wrong format.",
+                    f"\nPlease ensure the file has all the required keys: {required_keys}.")
+            return False
+        return True
 
 # Main Caller #
 if __name__ == "__main__":
