@@ -17,28 +17,16 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
         optimistic: Boolean flag to skip checking checksums
         skip: Boolean flag to skip version overwrite
     """
+    # Get filenames and clinet
+    client, files = util.get_client_and_keyfiles(key_directory_path)
 
-    # Create client and storing dict
-    client = secretmanager.SecretManagerServiceClient()
-    pubkeys_names = {}
-
-    # Set the filename desired format and filter with glob
-    desired_format = "keystore-m_12381_3600_*_0_0-*.json"
-    matching_files = glob.glob(os.path.join(key_directory_path, desired_format))
-
-    # Verify that there exists keystores matching the format
-    if len(matching_files) == 0:
-        print("[ERROR] No keys matching the keystore naming format found.",
-              f"\n\tExpected format is {desired_format}. See README.md for more details.")
-        return
-
-    # Get all filenames paths sorted by index and initialize counter
-    file_names = sorted(matching_files, key=lambda x: int(x.split("_")[4]))
+    # Initialize counter and local tracker
     i = 0
+    secret_names_to_pubkeys = {}
 
     # Iterate through all keystores
-    for key_file_path in file_names:
-        print(f"[INFO] Creating Secrets... {i}/{len(file_names)}", flush=True)
+    for key_file_path in files:
+        print(f"[INFO] Creating Secrets... {i}/{len(files)}", flush=True)
         
         #Get the name of the secret only
         key_file_name = key_file_path.split("/")[-1].strip(".json")
@@ -52,10 +40,10 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
             f.close()
         payload_bytes = contents.encode("utf-8")
 
-        # Skip version update is skip is set
+        # Skip version update if skip is set
         if skip and exists:
             print("\t[-] Skipping version update of existing secret.")
-            pubkeys_names[json.loads(contents)["pubkey"]] = key_file_name
+            secret_names_to_pubkeys[key_file_name] = json.loads(contents)["pubkey"]
             i += 1
             continue
 
@@ -66,21 +54,21 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
 
         # Add secret and save keys and name to file if optimistic.
         if optimistic:
-            pubkeys_names[json.loads(contents)["pubkey"]] = key_file_name
+            secret_names_to_pubkeys[key_file_name] = json.loads(contents)["pubkey"]
 
         # Else calculate string SHA256
         else:
             if util.verify_payload(client, version, contents):
                 print("\t[✓] Matching checksums of secret manager and local data.")
-                pubkeys_names[json.loads(contents)["pubkey"]] = key_file_name
+                secret_names_to_pubkeys[key_file_name] = json.loads(contents)["pubkey"]
             else:
                 print("\t[x] Data corruption detected. Panicing.")
                 exit(1)
 
         i += 1
 
-    print (f"\n[INFO] Secret creation completed - {i}/{len(file_names)}.",
+    print (f"\n[INFO] Secret creation completed - {i}/{len(files)}.",
            "Check Google Cloud Secret Manager.")
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
-    util.save_validator_pubkey_and_name(pubkeys_names, output_dir)
+    util.save_validator_pubkey_and_name(secret_names_to_pubkeys, output_dir)
     print(f"\t[✓] Done. Check {output_dir}")
