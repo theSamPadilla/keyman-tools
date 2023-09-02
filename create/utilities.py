@@ -1,6 +1,7 @@
 """Utilities for the create package"""
-import json
+import os
 import hashlib
+import glob
 from google.cloud import secretmanager
 
 def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManagerServiceClient,
@@ -29,20 +30,22 @@ def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManage
         })
         return False
 
-def save_validator_pubkey_and_name(pubkeys_to_names:dict, output:str):
+def save_validator_pubkey_and_name(secret_names_to_pubkeys:dict, output:str):
     """
     Saves the validator pubkeys and secret names locally for records.
 
     Args:
-        pubkeys_to_names: Map of Validator pubkeys to secret names
+        secret_names_to_pubkeys: Map of secret names to validator pubkeys.
+            For atomic secret creation, the dict is secret_name:[pubkey1, pubkey2... pubkeyN]
+            For single secret creation, the dict is secret_name: pubkey
         output: Chosen output directory in the config.
     """
     #Write files
-    with open(f"{output}public_keys.txt", "w", encoding="utf-8") as pf, open(f"{output}secret_names.txt", "w", encoding="utf-8") as nf, open(f"{output}pubkey_to_names.txt", "w", encoding="utf-8") as ptnf:
-        for pubkey, name in pubkeys_to_names.items():
+    with open(f"{output}public_keys.txt", "w", encoding="utf-8") as pf, open(f"{output}secret_names.txt", "w", encoding="utf-8") as nf, open(f"{output}secret_names_to_pubkeys.txt", "w", encoding="utf-8") as ptnf:
+        for secret_name, pubkey in secret_names_to_pubkeys.items():
             pf.write(f"{pubkey}\n")
-            nf.write(f"{name}\n")
-            ptnf.write(f"{pubkey} : {name}\n")
+            nf.write(f"{secret_name}\n")
+            ptnf.write(f"{secret_name} : {pubkey}\n")
         pf.close()
         nf.close()
         ptnf.close()
@@ -76,3 +79,22 @@ def verify_payload(client: secretmanager.SecretManagerServiceClient,
     if str_sha256.digest() == payload_sha256.digest():
         return True
     return False
+
+def get_client_and_keyfiles(key_directory_path: str) -> (secretmanager.SecretManagerServiceClient, list):
+    # Create client and storing dict
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Set the filename desired format and filter with glob
+    desired_format = "keystore-m_12381_3600_*_0_0-*.json"
+    matching_files = glob.glob(os.path.join(key_directory_path, desired_format))
+
+    # Verify that there exists keystores matching the format
+    if len(matching_files) == 0:
+        print("[ERROR] No keys matching the keystore naming format found.",
+              f"\n\tExpected format is {desired_format}. See README.md for more details.")
+        return
+
+    # Get all filenames paths sorted by index
+    file_names = sorted(matching_files, key=lambda x: int(x.split("_")[4]))
+
+    return client, file_names
