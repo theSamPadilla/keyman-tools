@@ -26,7 +26,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
     desired_format = "keystore-m_12381_3600_*_0_0-*.json"
     matching_files = glob.glob(os.path.join(key_directory_path, desired_format))
 
-    # Verify that there exist keystore matching the format
+    # Verify that there exists keystores matching the format
     if len(matching_files) == 0:
         print("[ERROR] No keys matching the keystore naming format found.",
               f"\n\tExpected format is {desired_format}. See README.md for more details.")
@@ -50,7 +50,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
         with open(f"{key_file_path}", 'r', encoding="us-ascii") as f:
             contents = f.read()
             f.close()
-        payload_bytes = contents.encode("UTF-8")
+        payload_bytes = contents.encode("utf-8")
 
         # Skip version update is skip is set
         if skip and exists:
@@ -70,10 +70,12 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
 
         # Else calculate string SHA256
         else:
-            pubkeys_names = util.verify_payload(client, version,
-                                            pubkeys_names,
-                                            key_file_name,
-                                            contents)
+            if util.verify_payload(client, version, contents):
+                print("\t[✓] Matching checksums of secret manager and local data.")
+                pubkeys_names[json.loads(contents)["pubkey"]] = key_file_name
+            else:
+                print("\t[x] Data corruption detected. Panicing.")
+                exit(1)
 
         i += 1
 
