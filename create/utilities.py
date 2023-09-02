@@ -49,23 +49,17 @@ def save_validator_pubkey_and_name(pubkeys_to_names:dict, output:str):
 
 def verify_payload(client: secretmanager.SecretManagerServiceClient,
                    version: secretmanager.SecretVersion,
-                   pubkeys_names: dict,
-                   secret_name: str,
-                   contents: str) -> dict:
+                   contents: str) -> bool:
     """
-    Verifies the sha256 checkcsum of the contents of keystore file, compared
-    to the hash of the created secret. If succesful, it stores the pubkey and
-    secret name locally for records. It panics otherwise.
-
+    Verifies the sha256 checkcsum of the contents string, compared
+    to the hash of the created secret.
     Args:
         client: the Secret manager client
         version: the Secret version getting checked against
-        pubkey_names: the dictionary where local data is getting stored
-        secret_name: the name of the secret
         contents: the contents of the validator keystore to be checked against
             the secret.
     
-    Returns: An updated dictionary with the new pubkey->secret name mapping
+    Returns: True if checksum matches, False otherwise
     """
 
     #Get string sha256
@@ -78,12 +72,7 @@ def verify_payload(client: secretmanager.SecretManagerServiceClient,
     payload = response.payload.data.decode("UTF-8")
     payload_sha256 = hashlib.sha256(payload.encode())
 
-    #If checksum verifies, store pubkey and secret locally
+    #If checksum verifies
     if str_sha256.digest() == payload_sha256.digest():
-        print("\t[✓] Matching checksums of secret manager and local data.")
-        pubkeys_names[json.loads(payload)["pubkey"]] = secret_name
-    else:
-        print("\t[x] Data corruption detected. Panicing.")
-        exit(1)
-    
-    return pubkeys_names
+        return True
+    return False
