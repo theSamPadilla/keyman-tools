@@ -124,9 +124,13 @@ cp sample.env .env
 Then, in `.env`, replace:
 - `PROJECT_ID` with your Google Cloud Project ID
 - `KEY_DIRECTORY_PATH` with the path to the directory containing your validator keystores.
-    **Note that the tool will only upload files that end `.json` AND start with `keystore-m`.**
 - `GOOGLE_APPLICATION_CREDENTIALS` with the path to the ADC file created preciously=.
 - `OUTPUT_DIRECTORY` with the path to the directory where you want the output files to be written.
+
+**Note:** 
+**It is essential that the keys in `KEY_DIRECTORY_PATH` match the default naming convention of the deposit CLI key generation. That is `keystore-m_12381_3600_<key-index>_0_0-<unix-timestamp>.json`. If `KEY_DIRECTORY_PATH` does not contain keystores compliant with the format, the tool will not run.**
+
+The aforementioned naming convention can be seen in the [deposit-cli code](https://github.com/ethereum/staking-deposit-cli/blob/master/staking_deposit/credentials.py#L155), where the generated keyfile names are `keystore-%s-%i.json`. The `%s` corresponds to the key path as defined in [EIP-2334](https://eips.ethereum.org/EIPS/eip-2334), with the `/` in the path being replaced by `_`, while the `%i` is the unix timestamp.
 
 # Running the tool
 ### Parameters
