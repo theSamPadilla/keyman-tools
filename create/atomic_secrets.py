@@ -37,7 +37,7 @@ def create_atomic_secrets(project_id: str, key_directory_path: str, output_dir: 
         print(f"[INFO] Scanning Secrets... {key_i}/{len(files)}", flush=True)
         
         # Read contents of json into str
-        with open(f"{key_file_name}", 'r', encoding="us-ascii") as f:
+        with open(f"{key_file_name}", 'r', encoding="utf-8") as f:
             contents = f.read()
             f.close()
 

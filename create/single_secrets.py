@@ -35,7 +35,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
         exists = util.create_secret_if_not_exists(client, project_id, key_file_name)
 
         # Read contents of json into str and pass to bytes
-        with open(f"{key_file_path}", 'r', encoding="us-ascii") as f:
+        with open(f"{key_file_path}", 'r', encoding="utf-8") as f:
             contents = f.read()
             f.close()
         payload_bytes = contents.encode("utf-8")
