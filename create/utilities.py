@@ -95,6 +95,7 @@ def get_client_and_keyfiles(key_directory_path: str) -> (secretmanager.SecretMan
         return
 
     # Get all filenames paths sorted by index
-    file_names = sorted(matching_files, key=lambda x: int(x.split("_")[4]))
+    file_names = sorted(matching_files, key=lambda x: int(x.split("_")[-3]))
+    print(file_names)
 
     return client, file_names
