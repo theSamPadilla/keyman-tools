@@ -31,18 +31,14 @@ def config_tool(params) -> list:
     atomic = False
     optimistic, skip = False, False
 
+    #Confirm overwrite
+    if not check_and_confirm_overwrite(output_dir):
+        return []
+
     #Single secret creation mode
     if "atomic" in params:
         atomic = True
         return [project_id, key_directory_path, google_adc, output_dir, optimistic, skip, atomic]
-
-    #Confirm overwrite
-    exists_pf = os.path.exists(f"{output_dir}public_keys.txt")
-    exists_nf = os.path.exists(f"{output_dir}secret_names.txt")
-    exists_ptnf = os.path.exists(f"{output_dir}pubkey_to_names.txt")
-    if exists_nf or exists_pf or exists_ptnf:
-        if not confirm_overwrite(output_dir):
-            return []
 
     #Process optional params if they exist
     if len(params) > 1:
@@ -66,13 +62,21 @@ def get_env_variables() -> list:
 
     return [project_id, key_directory_path, google_adc, output_dir]
 
-def confirm_overwrite(output_dir: str) -> bool:
+def check_and_confirm_overwrite(output_dir: str) -> bool:
     """
-        Confirms overwrite of existing output files
+        Checks for existing output files and confirms overwrite if they exist
     """
-    input_message = f"[WARN] There are public keys and secret files already in {output_dir}.\n\tDo you want to overwrite it? (yes only - anything else will halt.)\n\t\t"
-    response = input(input_message)
-    if response.lower() != 'yes':
-        return False
+    # Check if the output files exist
+    exists_pf = os.path.exists(f"{output_dir}public_keys.txt")
+    exists_nf = os.path.exists(f"{output_dir}secret_names.txt")
+    exists_ptnf = os.path.exists(f"{output_dir}secret_names_to_pubkeys.txt")
+    
+    # Confirm overwrite
+    if exists_nf or exists_pf or exists_ptnf:
+        input_message = f"[WARN] There are public keys and secret files already in {output_dir}\n\tDo you want to overwrite them? (yes only - anything else will halt.)\n\t\t"
+        response = input(input_message)
+        if response.lower() != 'yes':
+            return False
+    
     print()
     return True
