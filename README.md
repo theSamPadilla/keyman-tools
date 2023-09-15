@@ -1,10 +1,10 @@
 # Keyman Tools
-This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secret-manager).
-
 <p align="center">
 <img src="./misc/kymeny.jpeg" alt="Kymeny he Keyman Superhero" width="500"/>
 </p>
-<p align="center"><em> Kymeny, the Keyman Superhero </em></p>
+<p align="center" style="font-size:9pt"><em> Kymeny, the Key Manager Superhero </em></p>
+
+This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secret-manager).
 
 The tool needs to run in the same filesystem where the keys are stored (store the keys in a differnt directory than this repo). All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
