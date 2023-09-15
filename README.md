@@ -2,7 +2,7 @@
 <p align="center">
 <img src="./misc/kymeny.jpeg" alt="Kymeny he Keyman Superhero" width="500"/>
 </p>
-<p align="center" style="font-size:9px"><em> Kymeny, the Key Manager Superhero </em></p>
+<p align="center"><font size="9"><em> Kymeny, the Key Manager Superhero </em></font></p>
 
 This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secret-manager).
 
