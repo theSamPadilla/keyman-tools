@@ -1,6 +1,6 @@
 *.env
 *.pyc
 
-web3signer/*
+web3signer/install*
 
 to-do.md

@@ -1,0 +1,107 @@
+{
+    "name": "Validator Key Management Tools",
+    "main-file": "keyman-tools.py",
+    "program-description": "Compilation of tools to manage keys in the target directory defined in the .env file.",
+    "usage": {
+        "global-flags": false,
+        "commands": true,
+        "command-flags": true,
+        "subcommands": true,
+        "subcommand-flags": true,
+        "output-files": true
+    },
+    "commands": {
+        "secret-manager": {
+            "description": {
+                "short": "Manages CRUD operations for validator keystores on Google Cloud Secret Manager.",
+                "long":  "The secret-manager command helps you create, delete, get, and alter Google Cloud Secret Manager secrets. See available subcommands for more info.It scans the <KEY_DIRECTORY_PATH> variable defined in the .env file and creates secrets in the Google Cloud <PROJECT_ID> also defined in the .env file.\nYou must create Google Cloud Application Default Credentials (ADC) to execute this command.\nSee more instructions on the README.md or https://cloud.google.com/docs/authentication/provide-credentials-adc."
+            },
+            "subcommand-logic": {
+                "default": ""
+            }, 
+            "subcommands": {
+                "create": {
+                    "description": {
+                        "short": "Creates Google Cloud Secret Manager secrets in two differnt modes.",
+                          "long":  "The create commands helps you create Google Cloud Secret Manager secrets. It scans the <KEY_DIRECTORY_PATH> variable defined in the .env file and creates secrets in the Google Cloud <PROJECT_ID> also defined in the .env file.\nYou must create Google Cloud Application Default Credentials (ADC) to execute this command.\nSee more instructions on the README.md or https://cloud.google.com/docs/authentication/provide-credentials-adc."
+                        },   
+                    "subcommand-flags": {
+                        "--secret-mode" : {
+                            "values": {
+                                "single": "Every keystore in the target directory will generate one secret entry on Google Cloud Secret Manager.\n\tMake sure the keystores are in the format <keystore-m_12381_3600_i_0_0-timestamp.json>, where 'i' is the key index.\n\tSecrets created will be named keystore-m_12381_3600_i_0_0-timestamp.",
+                                "fat": "Creates 'fat' secrets containing multiple keystore data per secret.\n\tIt makes the secrets as close to the Google Cloud Secret Manager limit of 64kb per secret.\n\tMake sure the keystores are in the format <keystore-m_12381_3600_i_0_0-timestamp.json>, where 'i' is the key index.\n\tSecrets created will be named key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret."
+                            },
+                            "default": "fat",
+                            "description": "Defines the mode secrets get created."
+                        },
+                        "--skip": {
+                            "values": {},
+                            "default": false,
+                            "description": "When this flag is passed, the tool will not overwrite existing keystore version with a new one.\nSet this flag if you want run the tool in multiple waves against the same key directory, and want to keep a uniform version across all the Secrets."
+                        },
+                        "--optimistic": {
+                            "values": {},
+                            "description": "When this flag is passed, it makes the tool not check the validator keystore cheksum with the checksum of the created secret.\nSet this flag if you choose not to give your service account secret access permissions (`secretmanager.versions.access`).",
+                            "default": false
+                        }
+                    }
+                }
+            },
+            "command-flags": {
+                "--help": {
+                    "short": "Prints help for secret-manager command.",
+                    "long": "Prints help for secret-manager command.",
+                    "default": "",
+                    "values": {}
+                }
+            }
+        },
+        "web3signer": {
+            "description": {
+                "short": "Manages installation, config creation, and other actions for web3signer.",
+                "long": ""
+            },
+            "subcommand-logic": {
+                "default": ""
+            },
+            "subcommands": {
+                "install": {
+                    "description": {
+                        "short": "Installs web3signer for you.",
+                        "long": ""
+                    },
+                    "subcommand-flags": {}
+                },
+                "config": {
+                    "description": {
+                        "short": "Configure web3signer to run with the local keystores specified.",
+                        "long": ""
+                    },
+                    "subcommand-flags": {}
+                }
+            },
+            "command-flags": {
+                "--help": {
+                    "short": "Prints help for web3signer command.",
+                    "long": "",
+                    "default": ""
+                }
+            }
+        },
+        "help": {
+            "description": {
+                "short": "Prints help for the tool.",
+                "long": ""
+            },
+            "subcommand-logic": {"default": ""}, 
+            "subcommands": {},
+            "command-flags": {}
+        }
+    },
+    "global-flags": {},
+    "output-files": {
+        "public_keys.txt": "A list of all the public keys uploaded.",
+        "secret_names.tx": "A list of all the secret names created.",
+        "pubkey_to_names.txt": "A mapping of the public key to the created secret name."
+    }
+}
