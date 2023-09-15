@@ -30,21 +30,26 @@ def command_help(command: str):
         print(f"-----{bold}{bg_blue} Subcommands {end}-----")
         
         for subcomm, body in commands[command]["subcommands"].items():
-            print(f"{pink}{bold}\'{subcomm}\'{end}")
+            print(f"{bg_pink}Subcommand:{end} {pink}{bold}\'{subcomm}\'{end}")
             print(f"{body['description']['long']}")
             
             # Print subcommandcommand flags if they exist
             if len(body["subcommand-flags"]) > 0:
-                print(f"\n{bg_pink}Subcommand Flags{end}")
+                print(f"\n{bg_black}Subcommand Flags{end}")
                 for flag, flag_body in body["subcommand-flags"].items():
                     
                     #Check if the flag takes values
                     if len(flag_body["values"]) > 0:
+                        # Catch wildcard values
                         print(f"{yellow}\'{flag}=<value>\'{end}\n{flag_body['description']}")
+                        if "" in flag_body["values"]:
+                            print()
+                            continue
+                        
                         print(f"\n\t{bold}Accepted Values:{end}")
 
                         for val, desc in flag_body['values'].items():
-                           print(f"\t- {blue}{val}{end}:\n\t{desc}")
+                            print(f"\t- {blue}{val}{end}:\n\t{desc}")
         
                         print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
                         print()
@@ -54,7 +59,7 @@ def command_help(command: str):
                         print(f"{yellow}\'{flag}\'{end}\n{flag_body['description']}")
                         print(f"{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
                         print()
-            print()
+            print("\n")
 
 def get_command_usage_string(command: str) -> str:
     usage_string = f"{green}python3 {main_file} {bold}{red}{command}{end}"

@@ -69,7 +69,7 @@ def param_parser(params) -> list:
     # Get subcommand flags
     subcommand_flags = get_subcommand_flags(cmd_config["commands"][command]["subcommands"][subcommand]["subcommand-flags"],
                                             params, command, subcommand)
-
+    
     return [command, command_flags, subcommand, subcommand_flags]
 
 # Helper Functions #
@@ -169,13 +169,17 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
             # Get possible values for this flag head
             valid_flag_value = valid_flags[flag_head]["values"]
 
-            # If there are multiple values for the flag head
+            # If there is at least one value for the flag head
             #? If there are not multiple values for the flag head, it is a boolean flag
             if len(valid_flag_value) > 0:
                 flag_value = flag_to_val[1] # Get the value passed to the flag
 
+                # Catch wildcard value "", build flag with value passed
+                if "" in valid_flag_value:
+                    next_flag = f"{flag_head}={flag_value}"
+
                 # If passed value is not valid, warn and use default
-                if flag_value not in valid_flag_value:
+                elif flag_value not in valid_flag_value:
                     print(f"[WARN] Invalid value '{bold}{flag_value}{end}' for flag '{yellow}{flag_head}{end}'.",
                     f"Ignoring and using default '{blue}{valid_flags[flag_head]['default']}{end}'.")
                     next_flag = f"{flag_head}={valid_flags[flag_head]['default']}"

@@ -45,10 +45,5 @@ def main_help():
             # Newline
             print()
 
-    if p_output_files:
-        print(f"-----{bold}{bg_blue} OUTPUT {end}-----")
-        print(f"{tool_name} will create three files in the output dir defined in {gray}\'.env\'{end}:")
-        for file_name, description in output_files.items():
-            print(f"- {blue}\'{file_name}\'{end} -> {description}")
-    
-    print(f"\nFor a full description, see the {bold}README.md{end}\n")
+    print(f"-----{bold}{bg_blue} MORE HELP {end}-----")    
+    print(f"For a full description, see the {bold}README.md{end}\n")
