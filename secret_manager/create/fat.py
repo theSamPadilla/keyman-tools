@@ -2,7 +2,8 @@
 
 import json
 
-import secret_manager.create.utilities as util
+import secret_manager.create.utilities as create_util
+import secret_manager.utilities as util
 
 from google.cloud import secretmanager
 
@@ -18,7 +19,8 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
     """
 
     # Get filenames and clinet
-    client, files = util.get_client_and_keyfiles(key_directory_path)
+    client = util.create_sm_client()
+    files = create_util.get_keyfiles(key_directory_path)
 
     # Create storing dict, pubkeys list, and indexes
     secret_name_to_pubkeys = {}
@@ -89,7 +91,7 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
 
     # Save local records
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
-    util.save_validator_pubkey_and_name(secret_name_to_pubkeys, output_dir)
+    create_util.save_validator_pubkey_and_name(secret_name_to_pubkeys, output_dir)
     print(f"\t[✓] Done. Check {output_dir}")
 
 def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:str,
@@ -116,7 +118,7 @@ def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:s
 
     # Create secret if does not exist
     secret_name = f"key-index_{low_index}_to_{high_index}"
-    util.create_secret_if_not_exists(client, project_id, secret_name)
+    create_util.create_secret_if_not_exists(client, project_id, secret_name)
 
     # Get the payload string and bytes
     payload_string = "".join(payloads)
@@ -128,7 +130,7 @@ def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:s
     version = client.add_secret_version(request=request)
     
     # Verify payload calculate string SHA256
-    if util.verify_payload(client, version, payload_string):
+    if create_util.verify_payload(client, version, payload_string):
         print("\t[✓] Matching checksums of secret manager and local data.\n")
         secret_names_to_pubkeys[secret_name] = pubkeys
     else:

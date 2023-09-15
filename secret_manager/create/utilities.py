@@ -1,4 +1,4 @@
-"""Utilities for the create package"""
+"""Utilities for the create subcommand on secret-manager command"""
 import os
 import hashlib
 import glob
@@ -80,10 +80,13 @@ def verify_payload(client: secretmanager.SecretManagerServiceClient,
         return True
     return False
 
-def get_client_and_keyfiles(key_directory_path: str) -> (secretmanager.SecretManagerServiceClient, list):
-    # Create client and storing dict
-    client = secretmanager.SecretManagerServiceClient()
-
+def get_keyfiles(key_directory_path: str) -> list:
+    """
+    Gets a list of all the files in the key_directory_path that match the desired keystore format of
+    keystore-m_12381_3600_*_0_0-*.json. This is compliant with EIP2334.
+    See https://eips.ethereum.org/EIPS/eip-2334
+    https://github.com/ethereum/staking-deposit-cli/blob/master/staking_deposit/credentials.py#L155
+    """
     # Set the filename desired format and filter with glob
     desired_format = "keystore-m_12381_3600_*_0_0-*.json"
     matching_files = glob.glob(os.path.join(key_directory_path, desired_format))
@@ -98,4 +101,4 @@ def get_client_and_keyfiles(key_directory_path: str) -> (secretmanager.SecretMan
     #? Sorts by i in /full/path/to/keystore-m_12381_3600_i_0_0-timestamp.json
     file_names = sorted(matching_files, key=lambda x: int(x.split("_")[-3]))
     
-    return client, file_names
+    return file_names

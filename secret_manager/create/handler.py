@@ -4,7 +4,7 @@ import secret_manager.create.logic as cr_logic
 import secret_manager.create.single as single
 import secret_manager.create.fat as fatty
     
-def handler(subcommand_flags, project_id, key_directory_path, output_dir):
+def handler(subcommand_flags: list, project_id: str, key_directory_path: str, output_dir: str):
     """
     Handles create subcommand logic.
         1. Unpacks subcommand flags
