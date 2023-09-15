@@ -1,2 +1,6 @@
-.env
+*.env
 *.pyc
+
+web3signer/*
+
+to-do.md
