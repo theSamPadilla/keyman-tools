@@ -2,6 +2,7 @@
 
 import secret_manager.logic as logic
 import secret_manager.create.handler as create
+import secret_manager.get.handler as get
 
 def handler(command_flags, subcommand, subcommand_flags):
     """
@@ -21,3 +22,5 @@ def handler(command_flags, subcommand, subcommand_flags):
     # Route to appropriate subcommand
     if subcommand == "create":
         create.handler(subcommand_flags, project_id, key_directory_path, output_dir)
+    elif subcommand == "get":
+        get.handler(subcommand_flags, project_id, output_dir)
