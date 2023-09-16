@@ -24,7 +24,7 @@ if __name__ == "__main__":
     configs = param_parser(sys.argv[1:]) #?Pass only the parameters
     if not configs:
        exit(1)
-    
+
     #Unpack configs
     command, command_flags, subcommand, subcommand_flags = configs
 

@@ -115,6 +115,13 @@
                         }
                     }
                 },
+                "setup-db": {
+                    "description": {
+                        "short": "Starts up the slashing protection database.",
+                        "long": "Sets up the slashing protection database running on docker, using built-in bash scripts to run and do the db migrations."
+                    },
+                    "subcommand-flags": {}
+                },
                 "run": {
                     "description": {
                         "short": "Runs web3signer.",

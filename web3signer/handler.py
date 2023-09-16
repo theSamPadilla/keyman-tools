@@ -26,6 +26,9 @@ def handler(_, subcommand, subcommand_flags):
     elif subcommand == "config":
         print("Config WIP")
         config.handler(subcommand_flags)
+    elif subcommand == "setup-db":
+        print("Setup db WIP")
+        run.handler(subcommand_flags)
     elif subcommand == "run":
         print("Run WIP")
         run.handler(subcommand_flags)
