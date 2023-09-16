@@ -70,7 +70,7 @@
                                 "": ""
                             },
                             "default": "",
-                            "description": "Key index range to fetch.\nValue must be in format '<low-index>_<high-index>. For example '--index-range=0-99'\nWorks only for secrets with format key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret.\nMake sure that there is no secret key range overlap on Google Cloud Secret Manager or this will cause key conflicts."
+                            "description": "Key index range to fetch.\nValue must be in format '<low-index>_<high-index>. For example '--index-range=0-99'.\nWorks only for secrets with format key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret.\nMake sure that there is no secret key range overlap on Google Cloud Secret Manager or this will cause key conflicts."
                         }
                     }
                 }
@@ -118,14 +118,29 @@
                 "setup-db": {
                     "description": {
                         "short": "Starts up the slashing protection database.",
-                        "long": "Sets up the slashing protection database running on docker, using built-in bash scripts to run and do the db migrations."
+                        "long": "Starts up the slashing protection database using built-in bash scripts.\nIt runs the db on docker, listening to localhost:5432, and it applies the db migrations."
                     },
-                    "subcommand-flags": {}
+                    "subcommand-flags": {
+                        "--db-user": {
+                            "values": {
+                                "": ""
+                            },
+                            "default": "postgres",
+                            "description": "The user for the db."
+                        },
+                        "--db-password": {
+                            "values": {
+                                "": "A value"
+                            },
+                            "default": "db_password",
+                            "description": "The password value for the db.\nAlthough the database listens only on localhost, it is recommended to change the default password for added security."
+                        }
+                    }
                 },
                 "run": {
                     "description": {
                         "short": "Runs web3signer.",
-                        "long": "Starts web3signer from the latest binary and starts a slashing-protection database on docker."
+                        "long": "Starts web3signer."
                     },
                     "subcommand-flags": {}
                 }

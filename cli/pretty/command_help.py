@@ -39,11 +39,14 @@ def command_help(command: str):
                 print(f"\n{bg_black}Subcommand Flags{end}")
                 for flag, flag_body in body["subcommand-flags"].items():
                     
-                    #Check if the flag takes values
+                    #Check if the flag takes values (aka it is always on)
                     if len(flag_body["values"]) > 0:
+                        
                         # Catch wildcard values
                         print(f"{yellow}\'{flag}=<value>\'{end}\n{flag_body['description']}")
                         if "" in flag_body["values"]:
+                            if flag_body['default']:
+                                print(f"{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
                             print()
                             continue
                         

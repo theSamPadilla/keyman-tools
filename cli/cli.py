@@ -153,9 +153,12 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
     # Get the next flag if it exists
     next_flag = params.pop(0) if params else ""
 
-    # If no params exist, check for mandatory subcommands and pass default
+    # If no params exist, check for mandatory subcommand flags and pass default
     if not params:
         for flag_head, flag_body in valid_flags.items():
+
+            #? A mandatory (aka always on) flag has at least one value
+            #? It is up to the subcommand handler to implement the logic for what flag to prioritize.
             if len(flag_body["values"]) > 0:
                 subcommand_flags.append(f"{flag_head}={flag_body['default']}")
 
