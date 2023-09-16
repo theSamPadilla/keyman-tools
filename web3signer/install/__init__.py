@@ -1,0 +1,1 @@
+""" Install module for web3signer package """
