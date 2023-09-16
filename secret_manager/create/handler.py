@@ -1,4 +1,5 @@
 """Handler for 'create' subcommand on secret-manager command"""
+import os
 
 import secret_manager.logic as logic
 import secret_manager.create.single as single
@@ -23,9 +24,9 @@ def handler(subcommand_flags: list, project_id: str, key_directory_path: str, ou
     
     #Confirm overwrite
     output_files = [
-        f"{output_dir}public_keys.txt",
-        f"{output_dir}secret_names.txt",
-        f"{output_dir}secret_names_to_pubkeys.txt"
+        os.path.join(output_dir, "public_keys.txt"),
+        os.path.join(output_dir, "secret_names.txt"),
+        os.path.join(output_dir, "secret_names_to_pubkeys.txt")
     ]
     if not logic.check_and_confirm_overwrite(output_files, output_dir):
         return

@@ -40,8 +40,13 @@ def save_validator_pubkey_and_name(secret_names_to_pubkeys:dict, output:str):
             For single secret creation, the dict is secret_name: pubkey
         output: Chosen output directory in the config.
     """
-    #Write files
-    with open(f"{output}public_keys.txt", "w", encoding="utf-8") as pf, open(f"{output}secret_names.txt", "w", encoding="utf-8") as nf, open(f"{output}secret_names_to_pubkeys.txt", "w", encoding="utf-8") as ptnf:
+    # Get Paths
+    pk_path = os.path.join(output, "public_keys.txt")
+    sn_path = os.path.join(output, "secret_names.txt")
+    pksn_path = os.path.join(output, "secret_names_to_pubkeys.txt")
+ 
+    # Write files
+    with open(pk_path, "w", encoding="utf-8") as pf, open(sn_path, "w", encoding="utf-8") as nf, open(pksn_path, "w", encoding="utf-8") as ptnf:
         for secret_name, pubkey in secret_names_to_pubkeys.items():
             pf.write(f"{pubkey}\n")
             nf.write(f"{secret_name}\n")

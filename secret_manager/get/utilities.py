@@ -127,10 +127,11 @@ def write_secrets(secrets: list, output_dir: str):
         i = util.get_key_index(secret, mode="keystore")
         keystore_name = f"keystore-m_12381_3600_{i}_0_0-timestamp.json"
         
-        print(f"\t[-] Writing secret to {keystore_name}. Progress: {curr}/{total}")
+        print(f"\t[-] Writing secret to {keystore_name} - {curr}/{total}")
 
         # Write
-        with open(f"{output_dir}{keystore_name}", "w", encoding="utf-8") as f:
+        path = os.path.join(output_dir, keystore_name)
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(secret, f)
             f.close()
         

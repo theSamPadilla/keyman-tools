@@ -1,5 +1,7 @@
 """Handler for the 'get' subcommand of secret-manager command"""
 
+import os
+
 import secret_manager.logic as logic
 import secret_manager.get.logic as get_logic
 import secret_manager.get.index_range as get_range
@@ -27,7 +29,7 @@ def handler(subcommand_flags: list, project_id: str, output_dir: str):
             break
 
     # Check overwirte
-    if not logic.check_and_confirm_overwrite([f"{output_dir}imported_validator_keys/"], output_dir):
+    if not logic.check_and_confirm_overwrite([os.path.join(output_dir, "imported_validator_keys")], output_dir):
         return
 
     # Route to subcommand in order of priority

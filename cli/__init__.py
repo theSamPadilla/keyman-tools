@@ -7,7 +7,7 @@ from cli.pretty import *
 
 # Get and verify config.json
 def get_cmd_config():
-    """Opens and gets the cmd_config.json config file"""
+    """Opens and gets the config.json config file"""
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
     # Get cmd configs

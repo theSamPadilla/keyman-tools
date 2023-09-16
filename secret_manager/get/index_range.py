@@ -1,4 +1,5 @@
 """Fetches all keys from secret manager within a provided index"""
+import os
 
 import secret_manager.utilities as util
 import secret_manager.get.utilities as get_util
@@ -73,7 +74,7 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
     # Write keys
     print (f"\n[INFO] Writing {len(in_range_secrets)} keys",
            f"to '{output_dir}/imported_validator_keys/'...")
-    get_util.write_secrets(in_range_secrets, f"{output_dir}imported_validator_keys/")
-    print(f"\t[✓] Done. Check {output_dir}\n")
+    get_util.write_secrets(in_range_secrets, os.path.join(output_dir, "imported_validator_keys"))
+    print(f"\t[✓] Done. Check {os.path.join(output_dir, 'imported_validator_key')}\n")
 
     return
