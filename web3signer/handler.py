@@ -4,8 +4,10 @@ import os
 
 import web3signer.install.handler as install
 import web3signer.config.handler as config
+import web3signer.setup_db.handler as sdb
 import web3signer.run.handler as run
 import web3signer.utilities as util
+
 from cli.pretty.colors import blue, end, bold
 
 def handler(_, subcommand, subcommand_flags):
@@ -27,8 +29,7 @@ def handler(_, subcommand, subcommand_flags):
         print("Config WIP")
         config.handler(subcommand_flags)
     elif subcommand == "setup-db":
-        print("Setup db WIP")
-        run.handler(subcommand_flags)
+        sdb.handler(subcommand_flags)
     elif subcommand == "run":
         print("Run WIP")
         run.handler(subcommand_flags)
