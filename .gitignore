@@ -2,10 +2,9 @@
 *.pyc
 
 web3signer/install/scripts/config.yaml
-web3signer/install/scripts/database_migration.sh
 
+web3signer/setup-db/scripts/*
 web3signer/run/scripts/*
-dependencies/*
 
 
 to-do.md
