@@ -4,6 +4,7 @@ import json
 import re
 
 from dotenv import load_dotenv
+from cmd.pretty_cli.colors import bg_red, bold, end
 
 # Get module level settings
 def get_env_variables() -> list:
@@ -86,3 +87,17 @@ def validate_adc_format(file_format:str, path:str) -> bool:
                     f"\nPlease ensure the file has all the required keys: {required_keys}.")
             return False
         return True
+
+# Verify overwrite
+def check_and_confirm_overwrite(output_files: list, output_dir: str) -> bool:
+    """
+        Checks if any output files already exist and confirms overwrite if they exist
+    """
+    if any(os.path.exists(output) for output in output_files):
+        input_message = f"[WARN] There are conflicting files or directories already in {output_dir}\n\t{bg_red}{bold}Do you want to overwrite them?{end} (yes only - anything else will halt.)\n\t\t"
+        response = input(input_message)
+        if response.lower() != 'yes':
+            return False
+
+    print()
+    return True

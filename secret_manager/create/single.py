@@ -21,7 +21,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
     files = create_util.get_keyfiles(key_directory_path)
 
     # Initialize counter and local tracker
-    i = 0
+    i = 1
     secret_names_to_pubkeys = {}
 
     # Iterate through all keystores
@@ -67,8 +67,8 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
 
         i += 1
 
-    print (f"\n[INFO] Secret creation completed - {i}/{len(files)}.",
+    print ("\n[INFO] Secret creation completed .",
            "Check Google Cloud Secret Manager.")
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_names_to_pubkeys, output_dir)
-    print(f"\t[✓] Done. Check {output_dir}")
+    print(f"\t[✓] Done. Check {output_dir}\n")

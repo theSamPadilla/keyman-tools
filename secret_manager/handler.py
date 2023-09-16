@@ -4,7 +4,7 @@ import secret_manager.logic as logic
 import secret_manager.create.handler as create
 import secret_manager.get.handler as get
 
-def handler(command_flags, subcommand, subcommand_flags):
+def handler(_, subcommand, subcommand_flags):
     """
     Checks valid secret-manager config and routes execution to appropriate subcommand.
         1. Gets and validates env variables defined in .env

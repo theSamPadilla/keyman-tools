@@ -26,7 +26,7 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
     secret_name_to_pubkeys = {}
     pubkeys = []
     low_index = 0 #? Tracks the lowest key index included in any given payload
-    key_i = 0 #? Tracks the number of keys read
+    key_i = 1 #? Tracks the number of keys read
     secrets_created = 0 #? Tracks the number of secrets created
 
     # Initialize payload metric variables
@@ -48,8 +48,8 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
         #? https://eips.ethereum.org/EIPS/eip-2334
         #? This path is printed into the default filename keystore-m_12381_3600_i_0_0-timestamp.json
         #? https://github.com/ethereum/staking-deposit-cli/blob/master/staking_deposit/credentials.py#L155
-        key_index = int(key_file_name.split("_")[-3])
-        
+        key_index = util.get_key_index(key_file_name, "file")
+
         # Create secret if adding this JSON data to the payload would exceed the limit
         data_size = len(contents.encode("utf-8"))
         if current_payload_size + data_size + 1 > max_payload_size: # +1 for the newline char
@@ -85,14 +85,14 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
 
     # Print secret creation completion message
     print ("\n[INFO] Secret creation completed.",
-           f"\n\t[✓] Scanned {key_i}/{len(files)} secrets.",
+           f"\n\t[✓] Scanned {key_i-1}/{len(files)} secrets.",
            f"\n\t[✓] Created {secrets_created} secrets."
            "\nCheck Google Cloud Secret Manager.")
 
     # Save local records
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_name_to_pubkeys, output_dir)
-    print(f"\t[✓] Done. Check {output_dir}")
+    print(f"\t[✓] Done. Check {output_dir}\n")
 
 def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:str,
                   payloads:list, payload_size:int, secret_names_to_pubkeys: dict, pubkeys: list, 
@@ -113,7 +113,7 @@ def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:s
         Updated secret_names_to_pubkeys map
     """
     print(f"[INFO] Creating secret from index {low_index} to {high_index}",
-          f"and secret size {payload_size/1024}kb")
+          f"and secret size {round(payload_size/1024, 2)}kb")
 
 
     # Create secret if does not exist

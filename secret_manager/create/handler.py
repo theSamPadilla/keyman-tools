@@ -1,9 +1,9 @@
 """Handler for 'create' subcommand on secret-manager command"""
 
-import secret_manager.create.logic as cr_logic
+import secret_manager.logic as logic
 import secret_manager.create.single as single
 import secret_manager.create.fat as fatty
-    
+
 def handler(subcommand_flags: list, project_id: str, key_directory_path: str, output_dir: str):
     """
     Handles create subcommand logic.
@@ -22,7 +22,12 @@ def handler(subcommand_flags: list, project_id: str, key_directory_path: str, ou
             secret_mode = flag.split("=")[1]
     
     #Confirm overwrite
-    if not cr_logic.check_and_confirm_overwrite(output_dir):
+    output_files = [
+        f"{output_dir}public_keys.txt",
+        f"{output_dir}secret_names.txt",
+        f"{output_dir}secret_names_to_pubkeys.txt"
+    ]
+    if not logic.check_and_confirm_overwrite(output_files, output_dir):
         return
 
     #Route to subcommand execution
