@@ -1,7 +1,7 @@
 """Handler for 'create' subcommand on secret-manager command"""
 import os
 
-import secret_manager.logic as logic
+import secret_manager.validation_logic as logic
 import secret_manager.create.single as single
 import secret_manager.create.fat as fatty
 

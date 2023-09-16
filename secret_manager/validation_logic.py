@@ -4,7 +4,7 @@ import json
 import re
 
 from dotenv import load_dotenv
-from cli.pretty.colors import bg_red, bold, end
+from cli.pretty.colors import bg_red, bold, end, yellow
 
 # Get module level settings
 def get_env_variables() -> list:
@@ -94,7 +94,7 @@ def check_and_confirm_overwrite(output_files: list, output_dir: str) -> bool:
         Checks if any output files already exist and confirms overwrite if they exist
     """
     if any(os.path.exists(output) for output in output_files):
-        input_message = f"[WARN] There are conflicting files or directories already in {output_dir}\n\t{bg_red}{bold}Do you want to overwrite them?{end} (yes only - anything else will halt.)\n\t\t"
+        input_message = f"{yellow}[WARN]{end} There are conflicting files or directories already in {output_dir}\n\t{bg_red}{bold}Do you want to overwrite them?{end} (yes only - anything else will halt.)\n\t\t"
         response = input(input_message)
         if response.lower() != 'yes':
             return False

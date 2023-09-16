@@ -2,8 +2,8 @@
 
 import os
 
-import secret_manager.logic as logic
-import secret_manager.get.logic as get_logic
+import secret_manager.validation_logic as logic
+import secret_manager.get.validation_logic as get_logic
 import secret_manager.get.index_range as get_range
     
 def handler(subcommand_flags: list, project_id: str, output_dir: str):
