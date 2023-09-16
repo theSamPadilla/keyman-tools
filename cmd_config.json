@@ -48,7 +48,7 @@
                 "get": {
                     "description": {
                         "short": "Gets Google Cloud Secret Manager secrets",
-                        "long":  "The 'get' subcommand reads the latest version of one or many Google Cloud Secret Manager secrets in <PROJECT_ID>. It generates keystores files with the format <keystore-m_12381_3600_i_0_0-timestamp.json>, where 'i' is the key index, and stores them in 'OUTPUT_DIRECTORY' defined in the .env file."
+                        "long":  "The 'get' subcommand reads the latest version of one or many Google Cloud Secret Manager secrets in <PROJECT_ID>. It generates keystores files with the format <keystore-m_12381_3600_i_0_0-timestamp.json>, where 'i' is the key index, and stores them in an direcotry named 'imported_validator_keys' inside the 'OUTPUT_DIRECTORY' defined in the .env file."
                         },   
                     "subcommand-flags": {
                         "--secret" : {
@@ -70,7 +70,7 @@
                                 "": ""
                             },
                             "default": "",
-                            "description": "Key index range to fetch.\nValue must be in format '<low-index>_<high-index>. For example '--index-range=0-99'\nWorks only for secrets with format key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret."
+                            "description": "Key index range to fetch.\nValue must be in format '<low-index>_<high-index>. For example '--index-range=0-99'\nWorks only for secrets with format key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret.\nMake sure that there is no secret key range overlap on Google Cloud Secret Manager or this will cause key conflicts."
                         }
                     }
                 }

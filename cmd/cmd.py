@@ -61,15 +61,16 @@ def param_parser(params) -> list:
                 f"\n\tValid subcommands for {red}{command}{end} are {pink}{list(cmd_config['commands'][command]['subcommands'].keys())}{end}.")
             return []
         #? Else subcommand is valid
-    
-    # If there is no passed subcommand, assign the default 
+
+    # If there is no passed subcommand, assign the default
     else:
         subcommand = default_sub
 
     # Get subcommand flags
-    subcommand_flags = get_subcommand_flags(cmd_config["commands"][command]["subcommands"][subcommand]["subcommand-flags"],
-                                            params, command, subcommand)
-    
+    subcommand_flags = get_subcommand_flags(
+        cmd_config["commands"][command]["subcommands"][subcommand]["subcommand-flags"],
+        params, command, subcommand)
+
     return [command, command_flags, subcommand, subcommand_flags]
 
 # Helper Functions #
@@ -150,6 +151,12 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
 
     # Get the next flag if it exists
     next_flag = params.pop(0) if params else ""
+
+    # If no params exist, check for mandatory subcommands and pass default
+    if not params:
+        for flag_head, flag_body in valid_flags.items():
+            if len(flag_body["values"]) > 0:
+                subcommand_flags.append(f"{flag_head}={flag_body['default']}")
 
     # Iterate through params checking for valid command flags #?Flags denoted by --
     while "--" in next_flag:
