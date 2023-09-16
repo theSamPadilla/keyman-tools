@@ -1,6 +1,7 @@
 """Prints Pretty Help Message for a given command based on
 the command-help value of the command in config.json"""
-from cmd.pretty_cli import *
+from cli.pretty import *
+from cli import *
 
 def command_help(command: str):
     """Prints help message for a given command"""    
@@ -62,17 +63,18 @@ def command_help(command: str):
             print("\n")
 
 def get_command_usage_string(command: str) -> str:
-    usage_string = f"{green}python3 {main_file} {bold}{red}{command}{end}"
+    """Gets the usage string for the command passed"""
+    usage = f"{green}python3 {main_file} {bold}{red}{command}{end}"
 
     if len(commands[command]["command-flags"]) > 0:
-        usage_string += f" {yellow}[FLAGS]{end}"
+        usage += f" {yellow}[FLAGS]{end}"
          
     if len(commands[command]["subcommands"]) > 0:
-        usage_string += f" {pink}[SUBCOMMANDS]{end}"
+        usage += f" {pink}[SUBCOMMANDS]{end}"
 
     for sub in commands[command]["subcommands"]:
         if len(commands[command]["subcommands"][sub]["subcommand-flags"]) > 0:
-            usage_string += f" {yellow}[SUBCOMMAND_FLAGS]{end}"
+            usage += f" {yellow}[SUBCOMMAND_FLAGS]{end}"
             break
     
-    return usage_string
+    return usage

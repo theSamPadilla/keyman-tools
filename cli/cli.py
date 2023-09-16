@@ -1,8 +1,9 @@
 """Collection of config and setup functions for the tool"""
-from cmd.pretty_cli import *
+from cli.pretty import *
+from cli import *
 
-import cmd.pretty_cli.main_help as main_help
-import cmd.pretty_cli.command_help as cmd_help
+import cli.pretty.main_help as main_help
+import cli.pretty.command_help as cmd_help
 
 def param_parser(params) -> list:
     """

@@ -1,33 +1,39 @@
+"""Config package to setup the tool"""
+
+import os
 import json
-from cmd.pretty_cli.colors import *
+
+from cli.pretty import *
 
 # Get and verify config.json
 def get_cmd_config():
     """Opens and gets the cmd_config.json config file"""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+
     # Get cmd configs
-    with open("cmd_config.json", "r", encoding="utf-8") as c:
-        cmd_config = json.load(c)
+    with open(path, "r", encoding="utf-8") as c:
+        config = json.load(c)
         c.close()
     
-    return cmd_config
+    return config
 
 # Parse configs
 def get_usage_string() -> str:
     """Parses the usage booleans to build the usage message"""
-    usage_string = ""
+    usage = ""
 
     if p_global_flags:
-        usage_string += f"{yellow}[GLOBAL_FLAGS]{end} "
+        usage += f"{yellow}[GLOBAL_FLAGS]{end} "
     if p_commands:
-        usage_string += f"{red}[COMMAND]{end} "
+        usage += f"{red}[COMMAND]{end} "
     if p_command_flags:
-         usage_string += f"{yellow}[COMMAND_FLAGS]{end} "
+        usage += f"{yellow}[COMMAND_FLAGS]{end} "
     if p_subcommands:
-         usage_string += f"{pink}[SUBCOMMAND]{end} "
+        usage += f"{pink}[SUBCOMMAND]{end} "
     if p_subcommand_flags:
-         usage_string += f"{yellow}[SUBCOMMAND_FLAGS]{end}"
+        usage += f"{yellow}[SUBCOMMAND_FLAGS]{end}"
 
-    return usage_string
+    return usage
 
 # Get the cmd file and validate it
 cmd_config = get_cmd_config()

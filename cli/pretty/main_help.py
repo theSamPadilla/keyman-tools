@@ -1,5 +1,6 @@
 """Prints Pretty Help Message based on config.json for the whole tool"""
-from cmd.pretty_cli import *
+from cli.pretty import *
+from cli import *
 
 def main_help():
     """Prints main help message for the tool"""    

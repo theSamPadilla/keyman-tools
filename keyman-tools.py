@@ -14,7 +14,7 @@
 ############################################
 import sys
 
-from cmd.cmd import param_parser
+from cli.cli import param_parser
 import secret_manager.handler as sm
 import web3signer.handler as w3s
 
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     if command == "secret-manager":
         sm.handler(command_flags, subcommand, subcommand_flags)
     elif command == "web3signer":
-        w3s.handler()
+        w3s.handler(command_flags, subcommand, subcommand_flags)

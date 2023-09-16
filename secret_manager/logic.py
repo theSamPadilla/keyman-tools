@@ -4,7 +4,7 @@ import json
 import re
 
 from dotenv import load_dotenv
-from cmd.pretty_cli.colors import bg_red, bold, end
+from cli.pretty.colors import bg_red, bold, end
 
 # Get module level settings
 def get_env_variables() -> list:

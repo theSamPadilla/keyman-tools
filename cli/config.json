@@ -87,7 +87,7 @@
         "web3signer": {
             "description": {
                 "short": "Manages installation, config creation, and other actions for web3signer.",
-                "long": ""
+                "long": "The web3signer command enables you to automate the installation, configuration, and startup of web3signer and related dependencies such as the slashing-protection database."
             },
             "subcommand-logic": {
                 "default": ""
@@ -96,14 +96,29 @@
                 "install": {
                     "description": {
                         "short": "Installs web3signer for you.",
-                        "long": ""
+                        "long": "Install web3signer and docker using built-in bash scripts. It pulls web3signer with the latest binary."
                     },
                     "subcommand-flags": {}
                 },
                 "config": {
                     "description": {
-                        "short": "Configure web3signer to run with the local keystores specified.",
-                        "long": ""
+                        "short": "Configures web3signer to run with the local keystores passed in the path specified.",
+                        "long": "Creates a configuration file to run web3signer with local keystores. Requires the flag --kesytore-path=<value>, with a valid path to a directory containing all the keystores to load onto web3signer."
+                    },
+                    "subcommand-flags": {
+                        "--keystore-path": {
+                            "values": {
+                                "": "Any valid path."
+                            },
+                            "default": "",
+                            "description": "A path to the directory containing the keys to load onto web3signer."
+                        }
+                    }
+                },
+                "run": {
+                    "description": {
+                        "short": "Runs web3signer.",
+                        "long": "Starts web3signer from the latest binary and starts a slashing-protection database on docker."
                     },
                     "subcommand-flags": {}
                 }

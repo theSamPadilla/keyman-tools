@@ -1,7 +1,7 @@
 """Handles validation logic for get subcommand of secret-manager command"""
 from sys import exit
 
-from cmd.pretty_cli.colors import bg_black, yellow, end, bold
+from cli.pretty.colors import bg_black, yellow, end, bold
 
 # Validate Functions
 def validate_index_range(flag_head: str, range_str: str) -> tuple:
