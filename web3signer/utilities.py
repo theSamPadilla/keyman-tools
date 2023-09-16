@@ -1,7 +1,11 @@
 """ Utility functions for web3signer """
 
 import os
+import subprocess
 
+from cli.pretty.colors import bold, end, green, pink
+
+# Read bashrc
 def read_bashrc():
     """
     Checks .bashrc for lines of type 'export PATH=$PATH:<new-path>',
@@ -39,4 +43,19 @@ def read_bashrc():
 
     except FileNotFoundError:
         return False  # .bashrc file not found
-    
+
+# Check installations
+def check_command_is_installed(command: str) -> bool:
+    """Checks if the passed command is installed. Returns true if yes, false otherwise"""
+    print(f"[INFO] Looking for command: {pink}{command}{end}.")
+
+    r = subprocess.run(["which", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    #Command found
+    if r.returncode == 0:
+        print(f"\t[✓] {pink}{command}{end} found at {green}{r.stdout}{end}")
+        return True
+
+    # Not found
+    print(f"\t[x] {bold}{command}{end} not installed.")
+    return False

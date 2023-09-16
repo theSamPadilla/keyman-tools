@@ -6,22 +6,6 @@ import sys
 
 from cli.pretty.colors import bg_red, bold, end, green, yellow
 from web3signer.utilities import read_bashrc
-
-# Check installations
-def check_command_is_installed(command: str) -> bool:
-    """Checks if the passed command is installed. Returns true if yes, false otherwise"""
-    print(f"[INFO] Looking for command: {bold}{command}{end}.")
-
-    r = subprocess.run(["which", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    
-    #Command found
-    if r.returncode == 0:
-        print(f"\t[✓] {bold}{command}{end} found at {green}{r.stdout}{end}")
-        return True
-
-    # Not found
-    print(f"\t[x] {bold}{command}{end} not installed.")
-    return False
     
 # Install commands
 def run_installation_script(path: str):
