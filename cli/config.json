@@ -77,8 +77,10 @@
             },
             "command-flags": {
                 "--help": {
-                    "short": "Prints help for secret-manager command.",
-                    "long": "Prints help for secret-manager command.",
+                    "description": {
+                        "short": "Prints help for secret-manager command.",
+                        "long": "Prints help for secret-manager command."
+                    },
                     "default": "",
                     "values": {}
                 }
@@ -146,10 +148,21 @@
                 }
             },
             "command-flags": {
+                "--authorize-bash": {
+                    "description": {
+                        "short": "Skips authorization prompt before executing bash scripts.",
+                        "long": "When this flag is passed, the tool will not prompt for confirmation before executing bash scripts.\nOnly pass this flag if you trust the code that will get executed."
+                    },
+                    "default": false,
+                    "values": {}
+                },
                 "--help": {
-                    "short": "Prints help for web3signer command.",
-                    "long": "",
-                    "default": ""
+                    "description": {
+                        "short": "Prints help for web3signer command.",
+                        "long": ""
+                    },
+                    "default": "",
+                    "values": {}
                 }
             }
         },
