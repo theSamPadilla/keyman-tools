@@ -5,6 +5,8 @@ import json
 import secret_manager.create.utilities as create_util
 import secret_manager.utilities as util
 
+from cli.pretty.colors import green, end, red
+
 def create_single_secrets(project_id: str, key_directory_path: str, output_dir: str,
                           optimistic: bool, skip: bool):
     """Creates secrets using the python library through the API.
@@ -59,10 +61,10 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
         # Else calculate string SHA256
         else:
             if create_util.verify_payload(client, version, contents):
-                print("\t[✓] Matching checksums of secret manager and local data.")
+                print(f"\t[{green}✓{end}] Matching checksums of secret manager and local data.")
                 secret_names_to_pubkeys[key_file_name] = json.loads(contents)["pubkey"]
             else:
-                print("\t[x] Data corruption detected. Panicing.")
+                print(f"\t[{red}x{end}] Data corruption detected. Panicing.")
                 exit(1)
 
         i += 1
@@ -71,4 +73,4 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
            "Check Google Cloud Secret Manager.")
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_names_to_pubkeys, output_dir)
-    print(f"\t[✓] Done. Check {output_dir}\n")
+    print(f"\t[{green}✓{end}] Done. Check {output_dir}\n")

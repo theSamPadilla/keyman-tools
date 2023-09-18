@@ -2,7 +2,10 @@
 import os
 import hashlib
 import glob
+
 from google.cloud import secretmanager
+from cli.pretty.colors import red, end
+
 
 def create_secret_if_not_exists(secret_manager_client:secretmanager.SecretManagerServiceClient,
                                 project_id:str, secret_id:str) -> bool:
@@ -98,7 +101,7 @@ def get_keyfiles(key_directory_path: str) -> list:
 
     # Verify that there exists keystores matching the format
     if len(matching_files) == 0:
-        print("[ERROR] No keys matching the keystore naming format found.",
+        print(f"\n{red}[ERROR]{end} No keys matching the keystore naming format found.",
               f"\n\tExpected format is {desired_format}. See README.md for more details.")
         return
 

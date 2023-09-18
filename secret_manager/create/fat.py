@@ -6,6 +6,7 @@ import secret_manager.create.utilities as create_util
 import secret_manager.utilities as util
 
 from google.cloud import secretmanager
+from cli.pretty.colors import green, end, red
 
 def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str):
     """Scans the key_directory_path and builds a payload as close to the Secret Manager
@@ -85,14 +86,14 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
 
     # Print secret creation completion message
     print ("\n[INFO] Secret creation completed.",
-           f"\n\t[✓] Scanned {key_i-1}/{len(files)} secrets.",
-           f"\n\t[✓] Created {secrets_created} secrets."
+           f"\n\t[{green}✓{end}] Scanned {key_i-1}/{len(files)} secrets.",
+           f"\n\t[{green}✓{end}] Created {secrets_created} secrets."
            "\nCheck Google Cloud Secret Manager.")
 
     # Save local records
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_name_to_pubkeys, output_dir)
-    print(f"\t[✓] Done. Check {output_dir}\n")
+    print(f"\t[{green}✓{end}] Done. Check {output_dir}\n")
 
 def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:str,
                   payloads:list, payload_size:int, secret_names_to_pubkeys: dict, pubkeys: list, 
@@ -131,10 +132,10 @@ def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:s
     
     # Verify payload calculate string SHA256
     if create_util.verify_payload(client, version, payload_string):
-        print("\t[✓] Matching checksums of secret manager and local data.\n")
+        print("\t[{green}✓{end}] Matching checksums of secret manager and local data.\n")
         secret_names_to_pubkeys[secret_name] = pubkeys
     else:
-        print("\t[x] Data corruption detected. Panicing.")
+        print(f"\t[{red}x{end}] Data corruption detected. Panicing.")
         exit(1)
 
     return secret_names_to_pubkeys
