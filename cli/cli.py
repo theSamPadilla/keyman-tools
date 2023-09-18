@@ -191,15 +191,21 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
 
                 # If passed value is not valid, warn and use default
                 elif flag_value not in valid_flag_value:
-                    print(f"[WARN] Invalid value '{bold}{flag_value}{end}' for flag '{yellow}{flag_head}{end}'.",
-                    f"Ignoring and using default '{blue}{valid_flags[flag_head]['default']}{end}'.")
+                    print(f"[WARN] Invalid value '{bold}{flag_value}{end}' for flag '{yellow}{flag_head}{end}'.")
+
+                    # Print default if it exists and use it, else continue
+                    if valid_flags[flag_head]['default']:
+                        print(f"Ignoring and using default '{blue}{valid_flags[flag_head]['default']}{end}'.")
+                    
                     next_flag = f"{flag_head}={valid_flags[flag_head]['default']}"
-                
+
                 # If passed value is valid, build flag with value
                 else:
                     next_flag = f"{flag_head}={flag_value}"
 
-            subcommand_flags.append(next_flag)
+            # Append only if the flag has not been added before
+            if next_flag not in subcommand_flags:
+                subcommand_flags.append(next_flag)
     
         # Get the next flag if remaining parameters or break
         if params:

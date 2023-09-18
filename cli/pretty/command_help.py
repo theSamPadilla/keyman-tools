@@ -50,12 +50,15 @@ def command_help(command: str):
                             print()
                             continue
 
-                        print(f"\n\t{bold}Accepted Values:{end}")
+                        # Print accepted values
+                        print(f"\t{bold}Accepted Values:{end}")
 
                         for val, desc in flag_body['values'].items():
                             print(f"\t- {blue}{val}{end}:\n\t{desc}")
 
-                        print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
+                            # Print default if it exists
+                            if flag_body['default']:
+                                print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
 
                     #Boolean flags
                     else:

@@ -100,7 +100,16 @@
                         "short": "Installs web3signer for you.",
                         "long": "Install web3signer and docker using built-in bash scripts. It pulls web3signer with the latest binary."
                     },
-                    "subcommand-flags": {}
+                    "subcommand-flags": {
+                        "--linux-distro": {
+                            "values": {
+                                "ubuntu": "Installs docker for an ubuntu distribution.",
+                                "debian": "Installs docker for a debian distribution."
+                            },
+                                "default": "",
+                                "description": "When this flag is present, the tool will install docker for the specified distribution."
+                        }
+                    }
                 },
                 "config": {
                     "description": {
