@@ -5,7 +5,7 @@
 # Source .bashrc first then check if Java is installed
 source "$HOME"/.bashrc
 if command -v java &> /dev/null; then
-    echo -e "[INFO] Java is already installed. It has been written to the PATH on "$HOME"/.bashrc.\n"
+    echo -e "\n\n[INFO] Java is already installed. It has been written to the PATH on "$HOME"/.bashrc.\n"
     exit 0
 fi
 
@@ -13,7 +13,7 @@ fi
 export jdk_version="jdk-20"
 
 # Get the zip
-echo -e "[INFO] Installing the Java SDK as a dependency of web3signer.\n"
+echo -e "\n\n[INFO] Installing the Java SDK as a dependency of web3signer.\n"
 wget https://download.oracle.com/java/20/latest/"$jdk_version"_linux-x64_bin.tar.gz
 
 # Get and publish the sha256

@@ -1,36 +1,35 @@
 """ Validation functions for web3signer install """
 
-import subprocess
 import os
 import sys
+import subprocess
 
-from cli.pretty.colors import bg_red, bold, end, green, yellow
-from web3signer.utilities import read_bashrc
+import web3signer.utilities as util
+from cli.pretty.colors import red, end
     
 # Install commands
-def run_installation_script(path: str):
+def run_installation_script(path: str, command: str, authorize: bool):
     """
     Run the provided script and runs .bashrc to apply the changes.
     Args:
         path: Path to an installation script.
+        command: The command that is getting installed
+        authorize: Authorization flag. Prompts for confirmation if set to True.
     """
+
+    print(f"\n[INFO] Installing {command}.")
+
+    # Prompt for authorization if not authorized
+    if not authorize:
+        print("\nGrant permissions for installation below:")
+        if not util.confirm_script_execution(path):
+            sys.exit(0)
+
     if not os.path.isfile(path) or not path.endswith('.sh'):
-        print(f"[ERROR] Provided path {path} is not a a valid bash script")
-        sys.exit()
+        print(f"\n{red}[ERROR]{end} Provided path {path} is not a a valid bash script")
+        sys.exit(1)
     
-    subprocess.run(["bash", path])
-    read_bashrc()
+    # Run script and output stdout and stderr
+    subprocess.run(["bash", path], check=False)
+    util.read_bashrc()
     return
-
-# Confirm
-def confirm_script_execution(script: str) -> bool:
-    """
-        Confirm the user wants to execute the script.
-    """
-    input_message = f"{yellow}[WARN]{end} This command is about to {bold}execute the commands{end} in {green}{script}{end}.\n\tThis may alter your computer configurations, make sure you have verified the code that is about to execute.\n\n\t{bg_red}{bold}Do you want to proceed?{end} {bold}(yes only - anything else will halt.){end}\n\t\t"
-    response = input(input_message)
-    if response.lower() != 'yes':
-        return False
-
-    print()
-    return True

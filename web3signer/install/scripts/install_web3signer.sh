@@ -5,7 +5,7 @@
 # Source .bashrc first then check if web3signer is installed
 source "$HOME"/.bashrc
 if command -v web3signer &> /dev/null; then
-    echo -e "[INFO] Web3signer is already installed. It has been written to the PATH on "$HOME"/.bashrc.\n"
+    echo -e "\n\n[INFO] Web3signer is already installed. It has been written to the PATH on "$HOME"/.bashrc.\n"
     exit 0
 fi
 
@@ -13,7 +13,7 @@ fi
 export w3s_version=web3signer-23.9.0
 
 # Get the zip
-echo -e "[INFO] Installing $w3s_version \n"
+echo -e "\n\n[INFO] Installing $w3s_version \n"
 wget https://artifacts.consensys.net/public/web3signer/raw/names/web3signer.tar.gz/versions/latest/"$w3s_version".tar.gz
 
 # Set latest version as of 23.9.0 and publish the sha256
