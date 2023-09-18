@@ -28,14 +28,14 @@ def param_parser(params) -> list:
 
     # Check for command
     if len(params) < 1:
-        print(f"[ERROR] No command passed to {bold}{green}{main_file}{end}.",
+        print(f"\n{red}[ERROR]{end} No command passed to {bold}{green}{main_file}{end}.",
               f"\n\tRun '{bold}{green}python3 {main_file}{end} {red}help{end}' to see usage.")
         return []
 
     # Pop command and check validity
     command = params.pop(0)
     if command not in cmd_config["commands"]:
-        print(f"[ERROR] Invalid command '{bg_black}{command}{end}'.",
+        print(f"\n{red}[ERROR]{end} Invalid command '{bg_black}{command}{end}'.",
               f"\n\tValid commands are {red}{list(cmd_config['commands'].keys())}{end}.")
         return []
 
@@ -51,14 +51,14 @@ def param_parser(params) -> list:
     # Check for at least a passed subcommand or a default sub
     #? An empty string on the subcommand-logic->default means required subcommands.
     if not subcommand and not default_sub:
-        print(f"[ERROR] Command '{red}{command}{end}' requires a subcommand.",
+        print(f"\n{red}[ERROR]{end} Command '{red}{command}{end}' requires a subcommand.",
             f"\n\tRun '{green}{bold}python3 {main_file}{end} {red}{command} {yellow}--help{end}' for command help.")
         return []
         
     if subcommand:
         # Check subcommand validity
         if subcommand not in cmd_config["commands"][command]["subcommands"]:
-            print(f"[ERROR] Invalid subcommand '{bg_black}{command} {subcommand}{end}'.",
+            print(f"\n{red}[ERROR]{end} Invalid subcommand '{bg_black}{command} {subcommand}{end}'.",
                 f"\n\tValid subcommands for {red}{command}{end} are {pink}{list(cmd_config['commands'][command]['subcommands'].keys())}{end}.")
             return []
         #? Else subcommand is valid
@@ -200,13 +200,13 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
                     next_flag = f"{flag_head}={flag_value}"
 
             subcommand_flags.append(next_flag)
-        
+    
         # Get the next flag if remaining parameters or break
         if params:
             next_flag = params.pop(0)
         else:
             break
-    
+
     #? Any non-flag instructions after this gets ignored
-    
+
     return subcommand_flags
