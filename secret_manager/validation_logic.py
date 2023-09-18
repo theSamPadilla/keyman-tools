@@ -4,7 +4,7 @@ import json
 import re
 
 from dotenv import load_dotenv
-from cli.pretty.colors import bg_red, bold, end, yellow
+from cli.pretty.colors import bg_red, bold, end, yellow, red
 
 # Get module level settings
 def get_env_variables() -> list:
@@ -25,7 +25,7 @@ def validate_env_variables(project_id, key_directory_path, google_adc, output_di
         Runs the validation logic for the env params
     """
     if not project_id or not validate_proj_id(project_id):
-        print("[ERROR] Invalid Google Cloud Project Id.",
+        print(f"\n{red}[ERROR]{end} Invalid Google Cloud Project Id.",
               "\nPlease set a valid project ID in the .env file.")
         print("Valid format (^[a-z][a-z0-9-]*[a-z0-9]$):",
               "\n\t- lowercase letters\n\t- digits\n\t- hyphens",
@@ -34,17 +34,17 @@ def validate_env_variables(project_id, key_directory_path, google_adc, output_di
 
     # Project keys
     if not os.path.exists(key_directory_path):
-        print("[ERROR] Keys directory not found.\nPlease add the path to the .env file.")
+        print(f"\n{red}[ERROR]{end} Keys directory not found.\nPlease add the path to the .env file.")
         return False
 
     # Output Dir
     if not os.path.exists(output_dir):
-        print("[ERROR] Output directory not found.\nPlease add the path to the .env file.")
+        print(f"\n{red}[ERROR]{end} Output directory not found.\nPlease add the path to the .env file.")
         return False
 
     # Application Default Credentials exist
     if not os.path.exists(google_adc):
-        print("[ERROR] Application default credentials file not found.",
+        print(f"\n{red}[ERROR]{end} Application default credentials file not found.",
                 "\nPlease create an ADC file. See the README for how to do this.")
         return False
 
@@ -79,11 +79,11 @@ def validate_adc_format(file_format:str, path:str) -> bool:
         required_source_keys = ["client_id", "client_secret", "refresh_token", "type"]
         required_keys = ["service_account_impersonation_url", "source_credentials", "type"]
         if not all(k in buff for k in required_keys):
-            print("[ERROR] Application default credentials file has the wrong format.",
+            print(f"\n{red}[ERROR]{end} Application default credentials file has the wrong format.",
                     f"\nPlease ensure the file has all the required keys: {required_keys}.")
             return False
         if not all(k in buff["source_credentials"] for k in required_source_keys):
-            print("[ERROR] Application default credentials file has the wrong format.",
+            print(f"\n{red}[ERROR]{end} Application default credentials file has the wrong format.",
                     f"\nPlease ensure the file has all the required keys: {required_keys}.")
             return False
         return True

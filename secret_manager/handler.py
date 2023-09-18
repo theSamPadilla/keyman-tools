@@ -16,7 +16,7 @@ def handler(_, subcommand, subcommand_flags):
     project_id, key_directory_path, google_adc, output_dir = validation_logic.get_env_variables()
     if not validation_logic.validate_env_variables(project_id, key_directory_path, google_adc, output_dir):
         return
-    
+
     #? No command flags to process
 
     # Route to appropriate subcommand
