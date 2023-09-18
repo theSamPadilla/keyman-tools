@@ -10,11 +10,13 @@ import web3signer.utilities as util
 
 from cli.pretty.colors import blue, end, bold
 
-def handler(_, subcommand, subcommand_flags):
+def handler(command_flags, subcommand, subcommand_flags):
     """
     Sources .bashrc, checks web3sigenr logic and routes subcommands
     """
-    #? No command flags to validate
+    # Check for authorize-bash flag
+    authorize = "--authorize-bash" in command_flags
+
     # Source .bashrc
     brc_path = os.path.expanduser('~/.bashrc')
     if util.read_bashrc():
@@ -24,12 +26,12 @@ def handler(_, subcommand, subcommand_flags):
 
     # Route
     if subcommand == "install":
-        install.handler(subcommand_flags)
+        install.handler(subcommand_flags, authorize)
     elif subcommand == "config":
         print("Config WIP")
         config.handler(subcommand_flags)
     elif subcommand == "setup-db":
-        sdb.handler(subcommand_flags)
+        sdb.handler(subcommand_flags, authorize)
     elif subcommand == "run":
         print("Run WIP")
         run.handler(subcommand_flags)
