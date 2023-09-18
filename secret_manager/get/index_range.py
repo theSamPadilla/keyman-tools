@@ -4,6 +4,8 @@ import os
 import secret_manager.utilities as util
 import secret_manager.get.utilities as get_util
 
+from cli.pretty.colors import green, end
+
 def get_secrets_from_index_range(low: int, high: int, project_id: str, output_dir: str):
     """
     Scans Google Cloud Secret Manager and fetches the keys that fall within the provided range.
@@ -64,7 +66,7 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
         if high < s_high:
             break
             
-    print ("\t[✓] All keys found.")
+    print (f"\t[{green}✓{end}] All keys found.")
 
     print (f"\n[INFO] Found {len(in_range_secrets)} keys in the range {low} to {high}.")
     low_found = util.get_key_index(in_range_secrets[0], "keystore")
@@ -75,6 +77,6 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
     print (f"\n[INFO] Writing {len(in_range_secrets)} keys",
            f"to '{output_dir}/imported_validator_keys/'...")
     get_util.write_secrets(in_range_secrets, os.path.join(output_dir, "imported_validator_keys"))
-    print(f"\t[✓] Done. Check {os.path.join(output_dir, 'imported_validator_key')}\n")
+    print(f"\t[{green}✓{end}] Done. Check {os.path.join(output_dir, 'imported_validator_key')}\n")
 
     return

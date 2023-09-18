@@ -22,6 +22,7 @@ def handler(subcommand_flags: list, project_id: str, output_dir: str):
         flag = subcommand_flags.pop()
 
         # Check for index range
+        #TODO: All these flags get passed by default. Handle empty flag values better.
         if "--index-range" in flag:
             split_flag = flag.split("=")
             by_range = True
