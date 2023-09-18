@@ -39,9 +39,13 @@ def main_help():
 
             # Print command flags if they exist
             if len(body["command-flags"]) > 0:
-                print(f"\n\tCommand Flags:")
+                print("\n\tCommand Flags:")
                 for flag in body["command-flags"]:
-                    print(f"\t- {yellow}\'{flag}\'{end}")
+                    if flag != "--help":
+                        print(f"\t- {yellow}\'{flag}\'{end} ->",
+                            body["command-flags"][flag]["description"]["short"])
+                    else:
+                        print(f"\t- {yellow}\'{flag}\'{end}")
 
             # Newline
             print()

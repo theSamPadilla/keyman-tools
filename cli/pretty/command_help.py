@@ -5,7 +5,7 @@ from cli import *
 
 def command_help(command: str):
     """Prints help message for a given command"""    
-    
+
     # Command print
     print(f"\nCommand: {bold}{red}{command}{end}")
 
@@ -16,32 +16,32 @@ def command_help(command: str):
     # Description
     print(f"\n{bold}Description:{end}")
     print(f"{commands[command]['description']['long']}")
-    
+
     # Flags
     if len(commands[command]["command-flags"]) > 0:
         print(f"\n\n-----{bold}{bg_blue} Command Flags {end}-----")
-        for flag, description in commands[command]["command-flags"].items():
-            print(f"{yellow}\'{flag}\'{end}\n{description['long']}")
-            if description['default']:
-                print(f"\t{bold}Default: {description['default']}{end}")
+        for flag, flag_body in commands[command]["command-flags"].items():
+            print(f"{yellow}\'{flag}\'{end}\n{flag_body['description']['long']}")
+            if flag_body['default']:
+                print(f"\t{bold}Default: {flag_body['default']}{end}")
             print()
 
     # Subcommands
     if len(commands[command]["subcommands"]) > 0:
         print(f"-----{bold}{bg_blue} Subcommands {end}-----")
-        
+
         for subcomm, body in commands[command]["subcommands"].items():
             print(f"{bg_pink}Subcommand:{end} {pink}{bold}\'{subcomm}\'{end}")
             print(f"{body['description']['long']}")
-            
+
             # Print subcommandcommand flags if they exist
             if len(body["subcommand-flags"]) > 0:
-                print(f"\n{bg_black}Subcommand Flags{end}")
+                print(f"\n{bg_black}Subcommand Flags:{end}")
                 for flag, flag_body in body["subcommand-flags"].items():
-                    
+
                     #Check if the flag takes values (aka it is always on)
                     if len(flag_body["values"]) > 0:
-                        
+
                         # Catch wildcard values
                         print(f"{yellow}\'{flag}=<value>\'{end}\n{flag_body['description']}")
                         if "" in flag_body["values"]:
@@ -49,14 +49,13 @@ def command_help(command: str):
                                 print(f"{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
                             print()
                             continue
-                        
+
                         print(f"\n\t{bold}Accepted Values:{end}")
 
                         for val, desc in flag_body['values'].items():
                             print(f"\t- {blue}{val}{end}:\n\t{desc}")
-        
+
                         print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
-                        print()
 
                     #Boolean flags
                     else:
