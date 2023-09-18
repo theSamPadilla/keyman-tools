@@ -3,7 +3,7 @@
 
 web3signer/install/scripts/config.yaml
 
-web3signer/setup_db/scripts/*
+web3signer/setup_db/config/*
 web3signer/run/scripts/*
 
 
