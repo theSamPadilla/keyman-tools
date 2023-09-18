@@ -5,7 +5,7 @@ import sys
 import subprocess
 
 from cli.pretty.colors import bold, end, green, pink, red, yellow, bg_red
-from cli import tool_name
+from cli import main_file
 
 # Read bashrc
 def read_bashrc():
@@ -57,7 +57,7 @@ def check_dependencies(commands: list):
     for c in commands:
         if not check_command_is_installed(c):
             print(f"\n{red}[ERROR]{end} Missing required dependency {bold}{c}{end}.",
-                f"\n\tRun {bold}{green}python3 {tool_name}{end} {red}web3signer{end} {pink}install{end}")
+                f"\n\tRun {bold}{green}python3 {main_file}{end} {red}web3signer{end} {pink}install{end}")
             sys.exit(1)
     return
 

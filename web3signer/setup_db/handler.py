@@ -6,7 +6,7 @@ import sys
 import web3signer.utilities as util
 import web3signer.setup_db.validation_logic as sdb_logic
 
-from cli.utilities import print_usage_string
+from cli.utilities import print_usage_string_for_command_and_subcommand
 from cli.pretty import red, end
 
 def handler(subcommand_flags: list, authorize: bool):
@@ -24,7 +24,7 @@ def handler(subcommand_flags: list, authorize: bool):
     migrations_path = sdb_logic.check_web3signer_migrations_dir()
     if not migrations_path:
         print(f"\n{red}[ERROR]{end} web3signer not found in $PATH.",
-                f"\n\t Install it manually or run {print_usage_string('web3signer', 'install')}")
+                f"\n\t Install it manually or run {print_usage_string_for_command_and_subcommand('web3signer', 'install')}")
         sys.exit(1)
 
     # Get db setup scripts path
