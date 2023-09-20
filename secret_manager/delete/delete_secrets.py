@@ -1,6 +1,4 @@
 """Deletes all the secrets matching the provided pattern"""
-import os
-
 import secret_manager.utilities as util
 
 def delete_secrets(client: util.secretmanager.SecretManagerServiceClient, secrets: list, project_id: str):
