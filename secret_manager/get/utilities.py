@@ -1,36 +1,9 @@
 """Utilities for the get subcommand on secret-manager command"""
 
-import re
 import json
 import os
 
 import secret_manager.utilities as util
-
-def get_secret_names_matching_pattern(client: util.secretmanager.SecretManagerServiceClient,
-                                      project_id: str, pattern: str) -> list:
-    """
-    Gets a list of secret names matchign the provided pattern.
-
-    Args:
-        project-id: The Google Cloud Project ID from where to fetch secrets
-        pattern: A regex string pattern to check against.
-    
-    Returns: A list of secret names.
-    """
-    matching_secrets = []
-
-    # Build the parent and pattern
-    parent = f"projects/{project_id}"
-
-    # Get the raw secret names
-    raw_secret_names = client.list_secrets(request={"parent": parent})
-
-    for secret in raw_secret_names:
-        secret = secret.name.split("/")[-1] #Get only the secret name
-        if re.match(pattern, secret):
-            matching_secrets.append(secret)
-
-    return matching_secrets
 
 def read_secret_range(client: util.secretmanager.SecretManagerServiceClient,
                       project_id: str, secret_name: str, target_low: int, target_high: int,

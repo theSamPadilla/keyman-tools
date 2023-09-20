@@ -93,7 +93,7 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
     # Save local records
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_name_to_pubkeys, output_dir)
-    print(f"\t[{green}✓{end}] Done. Check {output_dir}\n")
+    print(f"\n\n[{green}SUCCESS{end}] Secret creation and local trackign complete. Check {output_dir}\n")
 
 def create_secret(client: secretmanager.SecretManagerServiceClient, project_id:str,
                   payloads:list, payload_size:int, secret_names_to_pubkeys: dict, pubkeys: list, 

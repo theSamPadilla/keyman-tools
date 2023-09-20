@@ -73,4 +73,4 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
            "Check Google Cloud Secret Manager.")
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     create_util.save_validator_pubkey_and_name(secret_names_to_pubkeys, output_dir)
-    print(f"\t[{green}✓{end}] Done. Check {output_dir}\n")
+    print(f"\n\n[{green}SUCCESS{end}] Secret creation and local saving complete. Check {output_dir}\n")

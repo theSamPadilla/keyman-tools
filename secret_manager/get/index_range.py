@@ -24,7 +24,7 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
     pattern = r"key-index_(0|[1-9]\d*)_to_(0|[1-9]\d*)"
 
     # Get all matching secret names and sort them
-    secret_names = get_util.get_secret_names_matching_pattern(client, project_id, pattern)
+    secret_names = util.get_secret_names_matching_pattern(client, project_id, pattern)
     secret_names = sorted(secret_names, key=lambda x:int(x.split("_")[1])) # Sorts on the low index
     print (f"[INFO] Found {len(secret_names)} total 'fat' secrets.")
 
@@ -77,6 +77,6 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
     print (f"\n[INFO] Writing {len(in_range_secrets)} keys",
            f"to '{output_dir}/imported_validator_keys/'...")
     get_util.write_secrets(in_range_secrets, os.path.join(output_dir, "imported_validator_keys"))
-    print(f"\t[{green}✓{end}] Done. Check {os.path.join(output_dir, 'imported_validator_key')}\n")
+    print(f"\n\n[{green}SUCCESS{end}] Key import succesful. Check {os.path.join(output_dir, 'imported_validator_key')}\n")
 
     return
