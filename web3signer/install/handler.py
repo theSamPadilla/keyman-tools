@@ -5,7 +5,7 @@ import sys
 
 from cli import tool_name
 from cli.utilities import print_usage_string_for_command_and_subcommand
-from cli.pretty.colors import yellow, end, red
+from cli.pretty.colors import yellow, end, red, green
 
 import web3signer.utilities as util
 import web3signer.install.validation_logic as in_logic
@@ -53,6 +53,6 @@ def handler(subcommand_flags, authorize: bool):
         w3s_install_path = os.path.join(script_dir, "install_web3signer.sh")
         in_logic.run_installation_script(w3s_install_path, "web3signer", authorize)
 
-    print("\n[INFO] Installation completed.\n")
+    print(f"\n[{green}SUCCESS{end}] Installation completed.\n")
 
     return

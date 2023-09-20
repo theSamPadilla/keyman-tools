@@ -7,7 +7,7 @@ import web3signer.utilities as util
 import web3signer.setup_db.validation_logic as sdb_logic
 
 from cli.utilities import print_usage_string_for_command_and_subcommand
-from cli.pretty import red, end
+from cli.pretty import red, end, green
 
 def handler(subcommand_flags: list, authorize: bool):
     """
@@ -36,7 +36,7 @@ def handler(subcommand_flags: list, authorize: bool):
 
     #? If it is running, the migrations should have been applied, return
     if container_id:
-        print("\n\n[INFO] Slashing protection database setup complete.")
+        print(f"\n\n[{green}SUCCESS{end}] Slashing protection database setup complete.")
         return
 
     # Get script path
@@ -57,4 +57,4 @@ def handler(subcommand_flags: list, authorize: bool):
     sdb_logic.apply_db_migrations(container_id, migrations_path, user,
                                   apply_migrations_script_path, authorize)
 
-    print("\n\n[INFO] Slashing protection database setup complete.")
+    print(f"\n\n[{green}SUCCESS{end}] Slashing protection database setup complete.")
