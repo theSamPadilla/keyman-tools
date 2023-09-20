@@ -3,8 +3,6 @@ import os
 
 import secret_manager.utilities as util
 
-from cli.pretty.colors import green, end
-
 def delete_secrets(client: util.secretmanager.SecretManagerServiceClient, secrets: list, project_id: str):
     """
     Deletes all the provided secrets.
