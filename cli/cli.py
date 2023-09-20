@@ -150,11 +150,16 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
     """
     subcommand_flags = []
 
+    param_count = len(params)
+
     # Get the next flag if it exists
-    next_flag = params.pop(0) if params else ""
+    if param_count > 0:
+        next_flag = params.pop(0)
+    else:
+        next_flag = ""
 
     # If no params exist, check for mandatory subcommand flags and pass default
-    if not params:
+    if param_count == 0:
         for flag_head, flag_body in valid_flags.items():
 
             #? A mandatory (aka always on) flag has at least one value

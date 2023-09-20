@@ -73,6 +73,34 @@
                             "description": "Key index range to fetch.\nValue must be in format '<low-index>_<high-index>. For example '--index-range=0-99'.\nWorks only for secrets with format key-index_l_to_h, where 'l' is the lowest and 'h' the highest key index in that secret.\nMake sure that there is no secret key range overlap on Google Cloud Secret Manager or this will cause key conflicts."
                         }
                     }
+                },
+                "delete": {
+                    "description": {
+                        "short": "Deletes Google Cloud Secret Manager secrets.",
+                        "long":  "The 'delete' subcommand prompts you for confirmation to delete secrets from Google Cloud Secret Manager in <PROJECT_ID> defined in the .env file. It deletes the secrets that match the provided flags. See subcommand flag options for more information."
+                        },   
+                    "subcommand-flags": {
+                        "--secret-name" : {
+                            "values": {
+                                "": "Any existing secret name."
+                            },
+                            "default": "",
+                            "description": "This flag will delete the exact secret that matches the provided name. If this flag is present, it will take presedence over other delete flags and instructions."
+                        },
+                        "--pattern": {
+                            "values": {
+                                "keystore": "Deletes all secrets on Google Cloud Secret Manager matching the <keystore-m_12381_3600_*_0_0-timestamp> format.",
+                                "index-range": "Deletes all secrets on Google Cloud Secret Manager matching the <key-index_*_to_*> format."
+                            },
+                            "default": "",
+                            "description": "This flag will delete all secrets that match the provided format. Be careful about using this flag as it will delete keys in bulk."
+                        },
+                        "--skip-confirmation": {
+                            "values": {},
+                            "default": false,
+                            "description": "If present, the tool will NOT prompt you for confirmation before deleting the secrets. Be very careful about passing this flag."
+                        }
+                    }
                 }
             },
             "command-flags": {

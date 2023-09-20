@@ -59,6 +59,7 @@ def command_help(command: str):
                             # Print default if it exists
                             if flag_body['default']:
                                 print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
+                        print()
 
                     #Boolean flags
                     else:
