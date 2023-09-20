@@ -59,7 +59,7 @@ def handler(subcommand_flags: list, project_id: str):
 
         # Get confirmation
         de_util.confirm_delete(skip_confirm, "patter", deletion_pattern)
-        matching_secrets = util.get_secret_names_matching_pattern(client, project_id, pattern)
+        matching_secrets = util.get_secret_names_matching_pattern(client, project_id, deletion_pattern)
 
         # Send to executer
         deleted_secrets = del_executer.delete_secrets(client, matching_secrets, project_id)
