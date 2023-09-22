@@ -1,0 +1,1 @@
+"""Get module for secrets package"""
