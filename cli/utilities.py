@@ -10,3 +10,7 @@ def print_usage_string_for_command_and_subcommand(command: str, subcommand: str)
 def print_usage_string_for_command_and_flag(command: str, flag: str) -> str:
     """Prints the usage string with the provided command and subcommand"""
     return f"{green}{bold}python3 {main_file}{end} {red}{command}{end} {yellow}{flag}{end}"
+
+def print_usage_string_for_command_subcommand_and_flag(command: str, subcommand: str, flag: str) -> str:
+    """Prints the usage string with the provided command and subcommand"""
+    return f"{green}{bold}python3 {main_file}{end} {red}{command}{end} {pink}{subcommand}{end} {yellow}{flag}{end}"

@@ -56,9 +56,9 @@ def command_help(command: str):
                         for val, desc in flag_body['values'].items():
                             print(f"\t- {blue}{val}{end}:\n\t{desc}")
 
-                            # Print default if it exists
-                            if flag_body['default']:
-                                print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
+                        # Print default if it exists
+                        if flag_body['default']:
+                            print(f"\t{bg_black}{bold}default{end}: {blue}{flag_body['default']}{end}")
                         print()
 
                     #Boolean flags
