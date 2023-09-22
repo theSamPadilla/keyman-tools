@@ -15,7 +15,7 @@
 import sys
 
 from cli.cli import param_parser
-import secret_manager.handler as sm
+import secrets.handler as sm
 import web3signer.handler as w3s
 
 if __name__ == "__main__":
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     command, command_flags, subcommand, subcommand_flags = configs
 
     #Route to the appropriate module
-    if command == "secret-manager":
+    if command == "secrets":
         sm.handler(command_flags, subcommand, subcommand_flags)
     elif command == "web3signer":
         w3s.handler(command_flags, subcommand, subcommand_flags)

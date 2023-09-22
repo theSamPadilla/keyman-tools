@@ -1,1 +1,0 @@
-"""Get module for secret-manager package"""

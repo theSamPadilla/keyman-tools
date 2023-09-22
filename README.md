@@ -4,9 +4,9 @@
 </p>
 <p align="center"><em> Kymeny, the Key Manager Superhero </em></p>
 
-This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secret-manager).
+This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secrets).
 
-The tool needs to run in the same filesystem where the keys are stored (store the keys in a differnt directory than this repo). All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secret-manager/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
+The tool needs to run in the same filesystem where the keys are stored (store the keys in a differnt directory than this repo). All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secrets/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
 As an extra layer of safety, it is recommended to either:
 - Generate the keys within the Google Cloud environment (such as a [Compute Engine](https://cloud.google.com/compute) VM) without public internet connectivity (no public IP address), ensuring API traffic is private.
@@ -39,7 +39,7 @@ This will be necessary to create your local credentials.
    - Search for `Secret Manager` on the search bar
    - Enable the API.
 
-    [More instructions here](https://cloud.google.com/secret-manager/docs/configuring-secret-manager).
+    [More instructions here](https://cloud.google.com/secrets/docs/configuring-secrets).
 
 # Credentials
 To limit the scope of actions that can be performed on your Google Cloud environment, we will use a [Google Cloud Service Account](https://cloud.google.com/iam/docs/service-account-overview) with a limited scope to Google Cloud Secret Manager. To be even more secure, we will use short lived [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials) [impersonating a service account](https://cloud.google.com/iam/docs/service-account-overview#impersonation) to authenticate the API calls.
@@ -78,7 +78,7 @@ The tool, by default, performs three operations:
 - **Version modification:** It populates the secret with contetns by making a new version.
 - **Version accessing:** It accesses the contents of the secret to verify data integrity compared to the local keystore.
 
-Each ot the three operation require the following [Secret Manager IAM permissions](https://cloud.google.com/secret-manager/docs/access-control#assign-iam-roles):
+Each ot the three operation require the following [Secret Manager IAM permissions](https://cloud.google.com/secrets/docs/access-control#assign-iam-roles):
 - **Secret creation:** `secretmanager.secrets.create`
 - **Version modification:** `secretmanager.versions.add`
 - **Version accessing:** `secretmanager.versions.access`
@@ -122,7 +122,7 @@ You can leave the credential file there or move it your directory of choice. Jus
 # Configuring the Environment
 Make a copy the `sample.env`:
 ```
-cd secure-validator-keystore-to-secret-manager
+cd secure-validator-keystore-to-secrets
 cp sample.env .env
 ```
 
