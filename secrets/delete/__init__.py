@@ -1,0 +1,1 @@
+"""Delete module for secrets package"""
