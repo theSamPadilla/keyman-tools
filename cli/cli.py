@@ -1,9 +1,12 @@
 """Collection of config and setup functions for the tool"""
+import sys
+
 from cli.pretty import *
 from cli import *
 
 import cli.pretty.main_help as main_help
 import cli.pretty.command_help as cmd_help
+import cli.pretty.subcommand_help as sub_help
 
 def param_parser(params) -> list:
     """
@@ -19,8 +22,8 @@ def param_parser(params) -> list:
     # Check for help command (tool-level help)
     if "help" in params:
         main_help.main_help()
-        exit(0)
-    
+        sys.exit(0)
+
     command = ""
     command_flags = []
     subcommand = ""
@@ -47,14 +50,14 @@ def param_parser(params) -> list:
 
     # Get default subcommand for this command
     default_sub = cmd_config["commands"][command]["subcommand-logic"]["default"]
-    
+
     # Check for at least a passed subcommand or a default sub
     #? An empty string on the subcommand-logic->default means required subcommands.
     if not subcommand and not default_sub:
         print(f"\n{red}[ERROR]{end} Command '{red}{command}{end}' requires a subcommand.",
             f"\n\tRun '{green}{bold}python3 {main_file}{end} {red}{command} {yellow}--help{end}' for command help.")
         return []
-        
+
     if subcommand:
         # Check subcommand validity
         if subcommand not in cmd_config["commands"][command]["subcommands"]:
@@ -92,19 +95,19 @@ def get_command_flags(valid_flags:list, params:list, command:str) -> dict:
         #? Some flags may be key=value flags
         flag_to_val = next_flag.split("=")
         flag_head = flag_to_val[0]
-        
+
         # Warn and ignore if flag is not valid
         if flag_head not in valid_flags:
             print(f"[WARN] Invalid flag '{yellow}{flag_head}{end}' for command '{red}{command}{end}'.",
                   "Ignoring and proceeding.")
-        
+
         # If flag head is valid 
         else:
             # Catch command helps
             if flag_head == "--help":
                 cmd_help.command_help(command)
-                exit(0)
-            
+                sys.exit(0)
+
             # Get possible values for this flag head
             valid_flag_value = valid_flags[flag_head]["values"]
 
@@ -118,14 +121,14 @@ def get_command_flags(valid_flags:list, params:list, command:str) -> dict:
                     print(f"[WARN] Invalid value '{bold}{flag_value}{end}' for flag '{yellow}{flag_head}{end}'.",
                     f"Ignoring and using default '{blue}{valid_flags[flag_head]['default']}{end}'.")
                     next_flag = f"{flag_head}={valid_flags[flag_head]['default']}"
-                
+
                 # If passed value is valid, build flag with value
                 else:
                     next_flag = f"{flag_head}={flag_value}"
 
             # Else append the flag
             command_flags.append(next_flag)
-        
+  
         # Get the next flag if remaining parameters or break
         if params:
             next_flag = params.pop(0)
@@ -166,6 +169,7 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
             #? It is up to the subcommand handler to implement the logic for what flag to prioritize.
             if len(flag_body["values"]) > 0:
                 subcommand_flags.append(f"{flag_head}={flag_body['default']}")
+                return []
 
     # Iterate through params checking for valid command flags #?Flags denoted by --
     while "--" in next_flag:
@@ -173,6 +177,11 @@ def get_subcommand_flags(valid_flags:list, params:list, command:str, subcommand:
         #? Some flags may be key=value flags
         flag_to_val = next_flag.split("=")
         flag_head = flag_to_val[0]
+
+        # Print subcommand help if --help
+        if flag_head == "--help":
+            sub_help.subcommand_help(command, subcommand)
+            sys.exit(0)
 
         # Warn and ignore if flag head is not valid.
         if flag_head not in valid_flags:
