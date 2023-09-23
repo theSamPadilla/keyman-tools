@@ -1,4 +1,5 @@
 """ Receives calls from main, handles validation, and routes to appropriate subcommand"""
+import sys
 
 import secrets.validation_logic as validation_logic
 import secrets.delete.handler as delete
@@ -13,14 +14,17 @@ def handler(_, subcommand, subcommand_flags):
         2. Confirms overwrite of external files
         3. Forwards request to the appropriate handler function
     """
-    # Get and validate env variables
+    # Get env variables
     project_id, key_directory_path, google_adc, output_dir = validation_logic.get_env_variables()
-    if not validation_logic.validate_env_variables(project_id, key_directory_path, google_adc, output_dir):
-        return
+    
+    # Verify project ID and google_adc
+    if not validation_logic.validate_env_variables(project_id, key_directory_path,
+                                                   google_adc, output_dir, subcommand):
+        sys.exit(1)
 
     #? No command flags to process
 
-    # Route to appropriate subcommand
+    # Route to appropriate subcommand if validation passes
     if subcommand == "create":
         create.handler(subcommand_flags, project_id, key_directory_path, output_dir)
     elif subcommand == "get":

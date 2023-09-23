@@ -20,10 +20,16 @@ def get_env_variables() -> list:
     return [project_id, key_directory_path, google_adc, output_dir]
 
 # Validate logic
-def validate_env_variables(project_id, key_directory_path, google_adc, output_dir )-> bool:
+def validate_env_variables(project_id: str, key_directory_path: str, google_adc: str,
+                           output_dir: str, subcommand: str)-> bool:
     """
-        Runs the validation logic for the env params
+        Runs the validation logic for the env params depending on the command.
+        Validates the Google Project ID and google ADC for all.
+        Validates the output directory for 'get'
+        Validates output dir and key path for 'create' 
     """
+
+    # Project Id
     if not project_id or not validate_proj_id(project_id):
         print(f"\n{red}[ERROR]{end} Invalid Google Cloud Project Id.",
               "\nPlease set a valid project ID in the .env file.")
@@ -32,20 +38,28 @@ def validate_env_variables(project_id, key_directory_path, google_adc, output_di
               "\n\t- it must start with a lowercase letter and end with a letter or number.")
         return False
 
-    # Project keys
-    if not os.path.exists(key_directory_path):
-        print(f"\n{red}[ERROR]{end} Keys directory not found.\nPlease add the path to the .env file.")
+    # Application Default Credentials exist
+    if not os.path.exists(google_adc):
+        print(f"\n{red}[ERROR]{end} Application default credentials file not found.",
+                "\nPlease create an ADC file. See the README for how to do this.")
         return False
+
+    # delete command doesn't need the subsequent validations
+    if subcommand == "delete":
+        return True
 
     # Output Dir
     if not os.path.exists(output_dir):
         print(f"\n{red}[ERROR]{end} Output directory not found.\nPlease add the path to the .env file.")
         return False
 
-    # Application Default Credentials exist
-    if not os.path.exists(google_adc):
-        print(f"\n{red}[ERROR]{end} Application default credentials file not found.",
-                "\nPlease create an ADC file. See the README for how to do this.")
+    # get command doesn't need the subsequent validations
+    if subcommand == "get":
+        return True
+
+    # Project keys
+    if not os.path.exists(key_directory_path):
+        print(f"\n{red}[ERROR]{end} Keys directory not found.\nPlease add the path to the .env file.")
         return False
 
     #? You can optionally validate the ADC format for Service Account Impersonation or Principal
