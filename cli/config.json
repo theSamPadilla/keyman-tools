@@ -139,10 +139,10 @@
                         }
                     }
                 },
-                "config": {
+                "keys-config": {
                     "description": {
-                        "short": "Configures web3signer to run with the local keystores passed in the path specified.",
-                        "long": "Creates a configuration file to run web3signer with local keystores. Requires the flag --kesytore-path=<value>, with a valid path to a directory containing all the keystores to load onto web3signer."
+                        "short": "Creates a keystore configuration file for web3signer using the keystore files in path passed to the command.",
+                        "long": "The 'keys-config' subcommand creates a keystore configuration file for web3signer as defined in https://docs.web3signer.consensys.net/reference/key-config-file-params#keystore-file."
                     },
                     "subcommand-flags": {
                         "--keystore-path": {
@@ -150,7 +150,29 @@
                                 "": "Any valid path."
                             },
                             "default": "",
-                            "description": "A path to the directory containing the keys to load onto web3signer."
+                            "description": "A path to the directory containing all the keys to write to the keystore configuration file for web3signer."
+                        },
+                        "--password-file-path": {
+                            "values": {
+                                "": "Path to the password file to decrypt the keystore."
+                            },
+                            "default": "",
+                            "description": "The path to a file containing the password to decrypt all the keystores getting written to the config file in this pass.\n\tYou can write keys to the same configuration file with different passwords by running the command multiple times and pointing it to different key directories with their respective decryption passwords."
+                        },
+                        "--output-file-path": {
+                            "values": {
+                                "": "Path to the configuration file."
+                            },
+                            "default": "",
+                            "description": "A path to the output configuration file. If the file does not exist, it will create it. If the file exists, it will append the key configuration to the contents of the file."
+                        },
+                        "--key-type": {
+                            "values": {
+                                "BLS": "Use for BLS flags.",
+                                "SECP256K1": "Use for SECP256K1 flags."
+                            },
+                            "default": "BLS",
+                            "description": "The type of flag as defined in https://docs.web3signer.consensys.net/reference/key-config-file-params#keystore-file."
                         }
                     }
                 },
