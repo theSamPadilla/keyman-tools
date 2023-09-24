@@ -1,4 +1,4 @@
-""" Handler for config subcommand on web3signer """
+""" Handler for keys-config subcommand on web3signer """
 
 import os
 
