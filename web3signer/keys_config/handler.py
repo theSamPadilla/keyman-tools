@@ -1,7 +1,6 @@
 """ Handler for config subcommand on web3signer """
 
 import os
-import sys
 
 import web3signer.keys_config.utilitites as util
 import web3signer.keys_config.validation_logic as logic
