@@ -36,9 +36,9 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
     current_payload_size = 0
     payloads = []
 
+    print("[INFO] Scanning Secrets.")
     # Iterate through all json files in keys directory
     for key_file_name in files:
-        print(f"[INFO] Scanning Secrets... {key_i}/{len(files)}", flush=True)
         
         # Read contents of json into str
         with open(f"{key_file_name}", 'r', encoding="utf-8") as f:
@@ -57,9 +57,11 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
         #? fat secret in the format: <timestamp>:<secret-contents>
         #? The timestamp exists only in the file name.
         timestamp = key_file_name.strip(".json").split("/")[-1].split("-")[-1]
-        
+
         # Concatenate the timestamp and contents
         contents = f"{timestamp}:{raw_contents}"
+
+        print(f"\t[{green}✓{end}] Read {key_file_name} - {key_i}/{len(files)}")
 
         # Create secret if adding this JSON data to the payload would exceed the limit
         data_size = len(contents.encode("utf-8"))
