@@ -1,10 +1,11 @@
 """Fetches all keys from secret manager within a provided index"""
 import os
+import sys
 
 import secrets.utilities as util
 import secrets.get.utilities as get_util
 
-from cli.pretty.colors import green, end
+from cli.pretty.colors import green, end, red, yellow, bold
 
 def get_secrets_from_index_range(low: int, high: int, project_id: str, output_dir: str):
     """
@@ -28,8 +29,8 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
     secret_names = sorted(secret_names, key=lambda x:int(x.split("_")[1])) # Sorts on the low index
     print (f"[INFO] Found {len(secret_names)} total 'fat' secrets.")
 
-    # Set in range secret payload
-    in_range_secrets = []
+    # Set in range secrets
+    in_range_secrets = [] #? This is a list of dictionaries
 
     # Find secret names within the low - high range
     print (f"\n[INFO] Searching for keys in the range {low} to {high}...")
@@ -65,18 +66,32 @@ def get_secrets_from_index_range(low: int, high: int, project_id: str, output_di
         # Check if all secrets found and break.
         if high < s_high:
             break
-            
-    print (f"\t[{green}✓{end}] All keys found.")
+
+    # Check if no keys were found, and exit if not
+    if low > s_high:
+        print(f"\n[{red}ERROR{end}] Provided low index {bold}{low}{end} out of range found in Secret Manager.")
+        sys.exit(1)
+
+    elif high > s_high:
+        print(f"\n[{yellow}WARN{end}] Provided high index {bold}{high}{end} beyond the range found in Secret Manager.",
+              f"\n\tMissing {bold}{high-s_high}{end} secrets.",
+              f"Ignoring and writing {len(in_range_secrets)} found secrets.")
+    else:
+        print (f"\t[{green}✓{end}] All keys found.")
 
     print (f"\n[INFO] Found {len(in_range_secrets)} keys in the range {low} to {high}.")
-    low_found = util.get_key_index(in_range_secrets[0], "keystore")
-    high_found = util.get_key_index(in_range_secrets[-1], "keystore")
+    
+    # Unpack the low and high index
+    _, low_secret = util.get_secret_timestamp_and_value(in_range_secrets[0])
+    low_found = util.get_key_index(low_secret, "keystore")
+    _, high_secret = util.get_secret_timestamp_and_value(in_range_secrets[-1])    
+    high_found = util.get_key_index(high_secret, "keystore")
     print (f"\t[-] From indexes {low_found} to {high_found}.")
 
     # Write keys
     print (f"\n[INFO] Writing {len(in_range_secrets)} keys",
            f"to '{output_dir}/imported_validator_keys/'...")
     get_util.write_secrets(in_range_secrets, os.path.join(output_dir, "imported_validator_keys"))
-    print(f"\n\n[{green}SUCCESS{end}] Key import succesful. Check {os.path.join(output_dir, 'imported_validator_keys')}\n")
+    print(f"\n\n[{green}SUCCESS{end}] Key import succesful. Check {green}{os.path.join(output_dir, 'imported_validator_keys')}{end}.\n")
 
     return

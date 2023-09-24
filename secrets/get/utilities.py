@@ -11,7 +11,8 @@ def read_secret_range(client: util.secretmanager.SecretManagerServiceClient,
     """
     Reads the latest version of a 'fat' secret and returns only the keys within a given range.
     Works only for key secrets with format key-index_l_to_h, where l and h are integers and l<h.
-    Caller must pre-validate that the low and high are in range (low >= l and high <= h)
+    Caller must pre-validate that the low and high are in range (low >= l and high <= h).
+    The secret is guaranteed to be sorted from low to high key index when getting created.
     
     Args:
         client: A Google Cloud secret manager client.
@@ -20,10 +21,10 @@ def read_secret_range(client: util.secretmanager.SecretManagerServiceClient,
         low: The low key index to start reading from.
         high: The high key index to stop reading at.
 
-    Returns: A list os secret payloads
+    Returns: A list os dictionaries mapping {secret-payload:timestamp}
     """
-    # Read the secret contents and turn a fat payload into a list of secrets
-    payload = process_raw_payload(read_secret(client, project_id, secret_name))
+    # Read the secret contents and turn a fat payload into a list of strings
+    timestamped_payload_str_list = process_raw_payload(read_secret(client, project_id, secret_name))
 
     #? Note: There are only 3 conditions under which this function is invoked:
     #? 1. Either only the low or high target index is in the range, find it.
@@ -32,31 +33,31 @@ def read_secret_range(client: util.secretmanager.SecretManagerServiceClient,
 
     # Check when the whole file needs to be read and return immediately
     if target_low == secret_low and secret_high == target_high:
-        return payload
+        return timestamped_payload_str_list
 
     # Find low
     elif target_low > secret_low and secret_high == target_high:
-        lli = binary_search(payload, target_low) #low list index
-        return payload[lli:]
+        lli = binary_search(timestamped_payload_str_list, target_low) #low list index
+        return timestamped_payload_str_list[lli:]
 
     # Find high
     elif target_low == secret_low and secret_high < target_high:
-        hli = binary_search(payload, target_high) #high list index
-        return payload[:hli]
+        hli = binary_search(timestamped_payload_str_list, target_high) #high list index
+        return timestamped_payload_str_list[:hli]
 
     #Find both
-    lli = binary_search(payload, target_low)
-    hli = binary_search(payload, target_high)
+    lli = binary_search(timestamped_payload_str_list, target_low)
+    hli = binary_search(timestamped_payload_str_list, target_high)
 
-    return payload[lli:hli+1] # +1 because you want the last index too
+    return timestamped_payload_str_list[lli:hli+1] # +1 because you want the last index too
 
 def process_raw_payload(raw: str) -> list:
     """
     Processes the raw payload of a fat secret.
-    Returns: A list of dictionaries, with each entry being an individual secret.
+    Returns: A list of strings in the format <timestamp>:<secret-contents>, where each secret content is a json string.
     """
     secret_string_list = raw.strip().split('\n')
-    return [json.loads(obj) for obj in secret_string_list]
+    return [buff for buff in secret_string_list]
 
 def binary_search(payload: list, target: int) -> int:
     """Performs binary search on the payload to find the list index of the key with index == target"""
@@ -65,7 +66,10 @@ def binary_search(payload: list, target: int) -> int:
 
     while l <= h:
         mid = (l + h) // 2
-        key_index = util.get_key_index(payload[mid], "keystore")
+        
+        # Get the index
+        _, secret = util.get_secret_timestamp_and_value(payload[mid])
+        key_index = util.get_key_index(secret, "keystore")
 
         # Return if found
         if key_index == target:
@@ -81,21 +85,29 @@ def binary_search(payload: list, target: int) -> int:
 
     return -1
 
-def write_secrets(secrets: list, output_dir: str):
+def write_secrets(timestamp_to_secret_list: list, output_dir: str):
     """
     Writes the secrets in the list to output_dir.
     It writes in format keystore-m_12381_3600_i_0_0-timestamp.json, where i is the key index.
+    
+    Args:
+        - timestamp_to_secrets_list: A list of strings in the format
+        <timestamp>:<secret>, where <secret> is a JSON string of the secret payload.
+        - output_dir: The output directory to write the secrets to.
     """
     # Create output dir if it does not exist:
     os.makedirs(os.path.dirname(output_dir), exist_ok=True)
 
-    total = len(secrets)
+    total = len(timestamp_to_secret_list)
     curr = 1
 
-    for secret in secrets:
+    for str_secret in timestamp_to_secret_list:
+        # Get the timestamp and secret value
+        timestamp, secret = util.get_secret_timestamp_and_value(str_secret)
+        
         # Get key index and set file name
         i = util.get_key_index(secret, mode="keystore")
-        keystore_name = f"keystore-m_12381_3600_{i}_0_0-timestamp.json"
+        keystore_name = f"keystore-m_12381_3600_{i}_0_0-{timestamp}.json"
 
         print(f"\t[-] Writing secret to {keystore_name} - {curr}/{total}")
 
