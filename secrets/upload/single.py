@@ -26,12 +26,14 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
     i = 1
     secret_names_to_pubkeys = {}
 
+    print("[INFO] Creating Secrets...")
     # Iterate through all keystores
     for key_file_path in files:
-        print(f"[INFO] Creating Secrets... {i}/{len(files)}", flush=True)
         
         #Get the name of the secret only
         key_file_name = key_file_path.split("/")[-1].strip(".json")
+        
+        print(f"\t[-] Reading file {key_file_name} - {i}/{len(files)}")
         
         # Create secret if does not exist
         exists = upload_util.create_secret_if_not_exists(client, project_id, key_file_name)
@@ -44,7 +46,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
 
         # Skip version update if skip is set
         if skip and exists:
-            print("\t[-] Skipping version update of existing secret.")
+            print("\t\t[-] Skipping version update of existing secret.")
             secret_names_to_pubkeys[key_file_name] = json.loads(contents)["pubkey"]
             i += 1
             continue
@@ -74,3 +76,4 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
     print("\n[INFO] Saving validator pubkeys and secret names locally.")
     upload_util.save_validator_pubkey_and_name(secret_names_to_pubkeys, output_dir)
     print(f"\n\n[{green}SUCCESS{end}] Secret creation and local saving complete. Check {output_dir}\n")
+
