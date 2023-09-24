@@ -3,7 +3,7 @@ import sys
 
 import secrets.validation_logic as validation_logic
 import secrets.delete.handler as delete
-import secrets.create.handler as create
+import secrets.upload.handler as upload
 import secrets.get.handler as get
 
 def handler(_, subcommand, subcommand_flags):
@@ -25,8 +25,8 @@ def handler(_, subcommand, subcommand_flags):
     #? No command flags to process
 
     # Route to appropriate subcommand if validation passes
-    if subcommand == "create":
-        create.handler(subcommand_flags, project_id, key_directory_path, output_dir)
+    if subcommand == "upload":
+        upload.handler(subcommand_flags, project_id, key_directory_path, output_dir)
     elif subcommand == "get":
         get.handler(subcommand_flags, project_id, output_dir)
     elif subcommand == "delete":

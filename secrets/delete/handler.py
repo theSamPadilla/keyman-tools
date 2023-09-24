@@ -11,7 +11,7 @@ from cli.utilities import print_usage_string_for_command_and_flag
 
 def handler(subcommand_flags: list, project_id: str):
     """
-    Handles create subcommand logic.
+    Handles upload subcommand logic.
         1. Unpacks subcommand flags
         2. Checks validity of the flags
         3. Gets confirmation or overwrite
@@ -65,6 +65,6 @@ def handler(subcommand_flags: list, project_id: str):
         deleted_secrets = del_executer.delete_secrets(client, matching_secrets, project_id)
 
 
-    print(f"\n[{green}SUCCESS{end}] Succesfully deleted {deleted_secrets} secrets.")
+    print(f"\n[{green}SUCCESS{end}] Succesfully deleted {deleted_secrets} secrets.\n")
 
     return
