@@ -33,7 +33,7 @@ def create_single_secrets(project_id: str, key_directory_path: str, output_dir: 
         #Get the name of the secret only
         key_file_name = key_file_path.split("/")[-1].strip(".json")
         
-        print(f"\t[-] Reading file {key_file_name} - {i}/{len(files)}")
+        print(f"\t[{green}✓{end}] Reading file {key_file_name} - {i}/{len(files)}")
         
         # Create secret if does not exist
         exists = upload_util.create_secret_if_not_exists(client, project_id, key_file_name)
