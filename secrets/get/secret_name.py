@@ -2,7 +2,6 @@
 import os
 import re
 import sys
-import json
 
 import secrets.utilities as util
 import secrets.get.utilities as get_util
