@@ -1,0 +1,21 @@
+[Unit]
+Description=Web3Signer Service
+After=network.target
+
+[Service]
+ExecStart=/path/to/web3signer --key-config-path=<key-config-path> \
+    --data-path=<web3-signer-path> \
+    --http-listen-port=<port> \
+    --metrics-enabled \
+    --http-host-allowlist=* \
+    eth2 \
+    --network=<network> \
+    --slashing-protection-db-url=<slashing-protection> \
+    --slashing-protection-db-username=<username> \
+    --slashing-protection-db-password=<password>
+StandardOutput=append:/path/to/log.log
+StandardError=append:/path/to/log.log
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
