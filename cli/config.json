@@ -150,21 +150,21 @@
                                 "": "Any valid path."
                             },
                             "default": "",
-                            "description": "A path to the directory containing all the keys to write to the keystore configuration file for web3signer."
+                            "description": "[Required]\nA path to the directory containing all the keys to write to the keystore configuration file for web3signer."
                         },
                         "--password-file-path": {
                             "values": {
                                 "": "Path to the password file to decrypt the keystore."
                             },
                             "default": "",
-                            "description": "The path to a file containing the password to decrypt all the keystores getting written to the config file in this pass.\n\tYou can write keys to the same configuration file with different passwords by running the command multiple times and pointing it to different key directories with their respective decryption passwords."
+                            "description": "[Required]\nThe path to a file containing the password to decrypt all the keystores getting written to the config file in this pass.\n\tYou can write keys to the same configuration file with different passwords by running the command multiple times and pointing it to different key directories with their respective decryption passwords."
                         },
                         "--output-file-path": {
                             "values": {
                                 "": "Path to the configuration file."
                             },
                             "default": "",
-                            "description": "A path to the output configuration file. If the file does not exist, it will create it. If the file exists, it will append the key configuration to the contents of the file."
+                            "description": "[Required]\nA path to the output configuration file. If the file does not exist, it will create it. If the file exists, it will append the key configuration to the contents of the file."
                         },
                         "--key-type": {
                             "values": {
