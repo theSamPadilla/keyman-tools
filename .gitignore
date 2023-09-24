@@ -1,7 +1,2 @@
 *.env
 *.pyc
-
-web3signer/run/scripts/*
-web3signer/config/*
-
-to-do.md
