@@ -1,1 +1,0 @@
-""" Config module for web3signer package """
