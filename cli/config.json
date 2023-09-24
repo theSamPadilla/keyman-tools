@@ -197,13 +197,6 @@
                             "description": "The password value for the db.\nAlthough the database listens only on localhost, it is recommended to change the default password for added security."
                         }
                     }
-                },
-                "run": {
-                    "description": {
-                        "short": "Runs web3signer.",
-                        "long": "Starts web3signer."
-                    },
-                    "subcommand-flags": {}
                 }
             },
             "command-flags": {
