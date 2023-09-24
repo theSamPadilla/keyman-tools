@@ -2,6 +2,7 @@
 
 import re
 import sys
+import json
 
 from google.cloud import secretmanager
 
@@ -25,6 +26,24 @@ def get_key_index(key: dict, mode: str) -> int:
         return int(key.split("_")[-3])
     print("[PANIC] Invalid key index value on get_key_index.")
     sys.exit(1)
+
+def get_secret_timestamp_and_value(key_string: str) -> tuple:
+    """
+    Returns the key timestamp and the secret value for a given keystore string
+
+    Args:
+        - key-string: A key string in the format <timestamp>:<secret>,
+            where the <secret> is a JSON string.
+    Returns: A tuple str:timestamp, dict:secret_value
+    """
+    buff = key_string.split(":", 1)
+
+    if len(buff) != 2:
+        print(f"[PANIC] Invalid key string {key_string}. Format shoud be <timestamp>:<secret>.")
+
+    secret_value = json.loads(buff[1])
+    timestamp = buff[0]
+    return timestamp, secret_value
 
 def get_secret_names_matching_pattern(client: secretmanager.SecretManagerServiceClient,
                                       project_id: str, pattern: str) -> list:
