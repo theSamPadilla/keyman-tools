@@ -3,7 +3,7 @@
 import os
 
 import web3signer.install.handler as install
-import web3signer.config.handler as config
+import web3signer.keys_config.handler as config
 import web3signer.setup_db.handler as sdb
 import web3signer.run.handler as run
 import web3signer.utilities as util
@@ -20,15 +20,14 @@ def handler(command_flags, subcommand, subcommand_flags):
     # Source .bashrc
     brc_path = os.path.expanduser('~/.bashrc')
     if util.read_bashrc():
-        print(f"[INFO] Found PATH entries in {blue}{brc_path}{end} and updated {blue}{bold}$PATH{end}.\n")
+        print(f"\n[INFO] Found PATH entries in {blue}{brc_path}{end} and updated {blue}{bold}$PATH{end}.\n")
     else:
-        print(f"[INFO] No PATH entries or no file found at {blue}{brc_path}{end}.\n")
+        print(f"\n[INFO] No PATH entries or no file found at {blue}{brc_path}{end}.\n")
 
     # Route
     if subcommand == "install":
         install.handler(subcommand_flags, authorize)
-    elif subcommand == "config":
-        print("Config WIP")
+    elif subcommand == "keys-config":
         config.handler(subcommand_flags)
     elif subcommand == "setup-db":
         sdb.handler(subcommand_flags, authorize)
