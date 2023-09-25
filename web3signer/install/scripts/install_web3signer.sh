@@ -10,19 +10,20 @@ if command -v web3signer &> /dev/null; then
 fi
 
 # Set version
-export w3s_version=web3signer-23.9.0
+export w3s_version=web3signer-23.9.1-RC1
 
 # Get the zip
 echo -e "\n\n[INFO] Installing $w3s_version \n"
 wget https://artifacts.consensys.net/public/web3signer/raw/names/web3signer.tar.gz/versions/latest/"$w3s_version".tar.gz
 
-# Set latest version as of 23.9.0 and publish the sha256
-sha='7af5cd0589f6105f2267b6c9e6eedda077d597e6410975e1687a6a20e7f1518c'
+# Set latest version as of 23.9.1-RC1 and publish the sha256
+#? See latest at https://cloudsmith.io/~consensys/repos/web3signer/packages/detail/raw/web3signer.tar.gz/23.9.1-RC1/
+sha='ef3e92e933e95e88658f9b7d39d8b565b8b4c86adcf5e69d8abfbd7c1ab79c49'
 echo -e "\n[INFO] Verifying SHA256 for web3signer: $sha."
-echo -e "[INFO] SHA256 hard-coded on installation script at latest=23.9.0."
+echo -e "[INFO] SHA256 hard-coded on installation script at latest=$w3s_version."
 
 # Verify the downloaded file using sha256sum
-if echo "$sha web3signer-23.9.0.tar.gz" | sha256sum --check --status -; then
+if echo "$sha "$w3s_version".tar.gz" | sha256sum --check --status -; then
   echo -e "\t[✓] SHA256 checksum verification succeeded."
 else
   echo -e "\tSHA256 checksum verification failed. Aborting installation."
