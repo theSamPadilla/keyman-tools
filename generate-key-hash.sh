@@ -13,5 +13,5 @@ if [ ! -d "$source_directory" ]; then
 fi
 
 echo "Calculating SHA-256 hashes for files in '$source_directory'..."
-find "$source_directory" -type f -exec sha256sum {} \; | sha256sum > source_key_directory_hash.txt
-echo "SHA-256 hashes aggregated and saved to source_key_directory_hash.txt."
+find "$source_directory" -type f -exec sha256sum {} \; | sha256sum > key_directory_hash.txt
+echo "SHA-256 hashes aggregated and saved to key_directory_hash.txt."
