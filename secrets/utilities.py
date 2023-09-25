@@ -4,7 +4,7 @@ import re
 import sys
 import json
 
-from google.cloud import secretmanager
+import google.cloud.secretmanager as secretmanager
 
 def create_sm_client() -> secretmanager.SecretManagerServiceClient:
     """Creates and returns a Google Cloud Secret Manager Client with ADC"""
