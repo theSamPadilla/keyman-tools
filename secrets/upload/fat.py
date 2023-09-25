@@ -27,7 +27,9 @@ def create_fat_secrets(project_id: str, key_directory_path: str, output_dir: str
     # Create storing dict, pubkeys list, and indexes
     secret_name_to_pubkeys = {}
     pubkeys = []
-    low_index = 0 #? Tracks the lowest key index included in any given payload
+
+    # Get the low index of the first key included in this file
+    low_index = util.get_key_index(files[0], "file") #? Tracks the lowest key index included in any given payload
     key_i = 1 #? Tracks the number of keys read
     secrets_created = 0 #? Tracks the number of secrets created
 

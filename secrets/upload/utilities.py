@@ -94,6 +94,9 @@ def get_keyfiles(key_directory_path: str) -> list:
     keystore-m_12381_3600_*_0_0-*.json. This is compliant with EIP2334.
     See https://eips.ethereum.org/EIPS/eip-2334
     https://github.com/ethereum/staking-deposit-cli/blob/master/staking_deposit/credentials.py#L155
+    
+    Returns a sorted list of these keystores based on the key index in the file name (that is
+    i in  keystore-m_12381_3600_i_0_0-<timestamp>.json)
     """
     # Set the filename desired format and filter with glob
     desired_format = "keystore-m_12381_3600_*_0_0-*.json"
