@@ -4,7 +4,7 @@
 </p>
 <p align="center"><em> Kymeny, the Key Manager Superhero </em></p>
 
-This repo contains a tool and instructions to securely upload/create validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secrets).
+This repo contains a tool and instructions to securely manage validator keys to [Google Cloud Secret Manager](https://cloud.google.com/secrets) and configure web3signer with those keys.
 
 The tool needs to run in the same filesystem where the keys are stored (store the keys in a differnt directory than this repo). All communications with the [Google Cloud Secret Manager API](https://cloud.google.com/secrets/docs/reference/rest) are authenticated using [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials).
 
