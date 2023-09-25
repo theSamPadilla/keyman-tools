@@ -114,7 +114,7 @@ def write_secrets(timestamp_to_secret_list: list, output_dir: str):
         # Write
         path = os.path.join(output_dir, keystore_name)
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(secret, f)
+            f.write(json.dumps(secret))
             f.close()
 
         curr += 1

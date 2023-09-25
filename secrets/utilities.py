@@ -41,7 +41,7 @@ def get_secret_timestamp_and_value(key_string: str) -> tuple:
     if len(buff) != 2:
         print(f"[PANIC] Invalid key string {key_string}. Format shoud be <timestamp>:<secret>.")
 
-    secret_value = json.loads(buff[1])
+    secret_value = json.loads(buff[1]).strip() #Strip leading or trailing \n
     timestamp = buff[0]
     return timestamp, secret_value
 
