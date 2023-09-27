@@ -21,6 +21,8 @@ echo "Calculating SHA-256 hashes for files in '$source_directory'..."
 # Piping everything to sha256sum causes issues if the path is different.
 # The '| cut -d' ' -f1' command filters the output and grabs only the hash
 # Effectively calculating only the sum of the hashes.
-find "$source_directory" -type f -exec sha256sum {} \; -type f | sort | cut -d' ' -f1 | sha256sum > $output_file
+hash_output=$(find "$source_directory" -type f -exec sha256sum {} \; -type f | sort | cut -d' ' -f1 | sha256sum)
 
-echo "SHA-256 hashes aggregated and saved to $output_file."
+echo "SHA-256 of provided key directory is $hash_output"
+echo $hash_output > $output_file
+echo "Saved hash to $output_file."
