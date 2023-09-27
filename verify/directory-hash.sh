@@ -23,6 +23,7 @@ echo "Calculating SHA-256 hashes for files in '$source_directory'..."
 # Effectively calculating only the sum of the hashes.
 hash_output=$(find "$source_directory" -type f -exec sha256sum {} \; -type f | sort | cut -d' ' -f1 | sha256sum)
 
-echo "SHA-256 of provided key directory is $hash_output"
+echo "SHA-256 of provided key directory is:" 
+echo -e "\033[0m\033[33m$hash_output\033[0m"
 echo $hash_output > $output_file
-echo "Saved hash to $output_file."
+echo -e "\n\nAlso saved hash to $output_file."
