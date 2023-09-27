@@ -20,6 +20,10 @@ for file in "$directory"/keystore-m_12381_3600_*.json; do
     i=$(basename "$file" | awk -F'_' '{print $4}' | awk -F'-' '{print $1}')
     echo "Calculating hash for keystore $file with index = $i"
     
-    sha256sum "$file" >> "$output_file"
+    hash=$(sha256sum "$file")
+    hash="${hash/\/\//\/}"  # Replace double slashes with a single slash in the hash output
+    
+    echo "$hash" >> "$output_file"
+    
 done
 echo "SHA-256 hashes for individual files saved to $output_file."
