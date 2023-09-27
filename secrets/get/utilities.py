@@ -118,7 +118,7 @@ def write_secrets(timestamp_to_secret_list: list, output_dir: str):
             f.close()
 
         # Set the file to read-only
-        os.chmod(path, 0o444)  # Read-only permissions
+        os.chmod(path, 0o440)  # Read-read-none permissions
 
         curr += 1
 
