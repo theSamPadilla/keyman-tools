@@ -15,5 +15,12 @@ fi
 output_file="whole-directory-hash.txt"
 
 echo "Calculating SHA-256 hashes for files in '$source_directory'..."
-find "$source_directory" -type f -exec sha256sum {} \; | sha256sum > $output_file
+
+# Calculate the hash of the hases only.
+# the 'sha25sum <path-to-a-file> command outputs the following: <hash> <path-to-a-file>
+# Piping everything to sha256sum causes issues if the path is different.
+# The '| cut -d' ' -f1' command filters the output and grabs only the hash
+# Effectively calculating only the sum of the hashes.
+find "$source_directory" -type f -exec sha256sum {} \; | cut -d' ' -f1 | sha256sum > $output_file
+
 echo "SHA-256 hashes aggregated and saved to $output_file."
