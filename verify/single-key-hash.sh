@@ -15,5 +15,11 @@ fi
 output_file="single-key-hashes.txt"
 
 echo "Generating SHA-256 hashes for all key files in '$directory'..."
-find "$directory" -type f -exec sha256sum {} \; > "$output_file"
+# Iterate through files in ascending order of "i"
+for file in "$directory"/keystore-m_12381_3600_*.json; do
+    i=$(basename "$file" | awk -F'_' '{print $4}' | awk -F'-' '{print $1}')
+    echo "Calculating hash for keystore $file with index = $i"
+    
+    sha256sum "$file" >> "$output_file"
+done
 echo "SHA-256 hashes for individual files saved to $output_file."
