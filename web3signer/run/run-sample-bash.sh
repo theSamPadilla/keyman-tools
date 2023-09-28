@@ -4,7 +4,7 @@ echo "Running web3signer..."
 # Web3 Signer
 nohup web3signer --key-config-path=<key-config-path-generated-by-this-tool> \
 	--data-path=<web3-signer-path> \
-	--http-listen-port=5432 \
+	--http-listen-port=6969 \
 	--metrics-enabled \
 	--http-host-allowlist=* \
 	eth2 \
