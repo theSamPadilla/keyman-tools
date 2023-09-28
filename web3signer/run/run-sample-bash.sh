@@ -9,6 +9,6 @@ nohup web3signer --key-config-path=<key-config-path-generated-by-this-tool> \
 	--http-host-allowlist=* \
 	eth2 \
 	--network=<network> \
-	--slashing-protection-db-url="jdbc:postgresql://localhost/web3signer" \
+	--slashing-protection-db-url="jdbc:postgresql://localhost/slashing-protection-db" \
 	--slashing-protection-db-username=<username> \
 	--slashing-protection-db-password=<password> >> <path-to-log.log 2>&1 &
